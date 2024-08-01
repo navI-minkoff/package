@@ -1,45 +1,66 @@
 from photoshop import Session
-from utils.photoshop_utils import packagingSpreads, packingLists, packagingGroup, deleteUnwantedLayers, fillLayer
+
+from utils.photoshop_utils import packagingSpreads, packingLists, packagingGroup, deleteUnwantedLayers, fillLayer, \
+    packingLastListsWithGroupPages
 from utils.file_utils import getJpegFilenames, extractNumber
 from utils.naming_utils import generatePrefixes
 
-def packege():
-    global jpeg_filenames, folder_path, group_jpeg_filenames, \
-        folder_group_path, lists_jpeg_filenames, folder_lists_path, \
-        groups_jpeg, individual_path_list, jpeg_filenames_individual_list
+layersCannotRemoved = ["Фон", "Разметка", "Пояснения"]
+paintLayer = "Фон"
 
+
+def package(folder_path, folder_group_path, image_teacher_path,
+            folder_lists_path, individual_path_list=None):
+    global jpeg_filenames_individual_list, groups_jpeg, group_jpeg_filenames, jpeg_filenames, lists_jpeg_filenames
     source_psd_path = "C:/programms/undr/page.psd"
-    image_teacher_path = "C:/undr/2024/Школа №18 9Г/макет/уч/1.jpg"
     output_path = "C:/undr/2024/Школа №18 9Г/res"
 
+    groups_jpeg = []
+    lists_jpeg = []
+    design = "light"  # dark
+
+    album_version = "med" # min/prem
+
     try:
-        folder_path = "C:/undr/2024/Школа №18 9Г/макет/развр1"
         jpeg_filenames = sorted(getJpegFilenames(folder_path), key=extractNumber)
 
-        folder_lists_path = "C:/undr/2024/Школа №18 9Г/макет/сп"
         lists_jpeg_filenames = sorted(getJpegFilenames(folder_lists_path), key=extractNumber)
 
-        individual_path_list = "C:/programms/undr/lists1/"
-        jpeg_filenames_individual_list = getJpegFilenames(individual_path_list)
+        # individual_path_list = "C:/programms/undr/lists1/"
+        # jpeg_filenames_individual_list = getJpegFilenames(individual_path_list)
 
-        folder_group_path = "C:/undr/2024/Школа №18 9Г/макет/гр/oбщ"
         group_jpeg_filenames = sorted(getJpegFilenames(folder_group_path), key=extractNumber)
 
-        folder_group1_path = "C:/undr/2024/Школа №18 9Г/макет/гр/калинкина"
-        group1_jpeg_filenames = sorted(getJpegFilenames(folder_group1_path), key=extractNumber)
+        # group1_jpeg_filenames = sorted(getJpegFilenames(folder_group1_path), key=extractNumber)
+        #
+        # group2_jpeg_filenames = sorted(getJpegFilenames(folder_group2_path), key=extractNumber)
 
-        folder_group2_path = "C:/undr/2024/Школа №18 9Г/макет/гр/куликовских"
-        group2_jpeg_filenames = sorted(getJpegFilenames(folder_group2_path), key=extractNumber)
-        groups_jpeg = [
-            {"folder_path": folder_group_path, "jpeg_filenames": group_jpeg_filenames, "postfix": "000", "design": "white"},
-            {"folder_path": folder_group1_path, "jpeg_filenames": group1_jpeg_filenames, "postfix": "007", "design": "white"},
-            {"folder_path": folder_group2_path, "jpeg_filenames": group2_jpeg_filenames, "postfix": "014", "design": "white"}
-        ]
 
     except ValueError as e:
         print("Ошибка:", e)
 
-    with Session(action="open", file_path=source_psd_path, auto_close=False) as ps:
+
+    groups_jpeg = [
+        {"folder_path": folder_group_path, "jpeg_filenames": group_jpeg_filenames, "postfix": "000"}
+    ]
+
+    lists_jpeg = [
+        {"folder_path": folder_group_path, "jpeg_filenames": group_jpeg_filenames, "postfix": "000"}
+    ]
+
+    groups_jpeg = [
+        {"folder_path": "C:/programms/undr/group", "jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group"), key=extractNumber), "postfix": "000"},
+        {"folder_path": "C:/programms/undr/group1",
+         "jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group1"), key=extractNumber), "postfix": "001"}
+    ]
+
+    lists_jpeg = [
+        {"folder_path": "C:/programms/undr/lists", "jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists"), key=extractNumber), "postfix": "000"},
+        {"folder_path": "C:/programms/undr/lists1",
+         "jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists1"), key=extractNumber), "postfix": "001"}
+
+    ]
+    with Session(action="open", file_path=source_psd_path, auto_close=False, ps_version="2022") as ps:
         doc = ps.active_document
 
         jpeg_options = ps.JPEGSaveOptions()
@@ -49,16 +70,18 @@ def packege():
             if layer.name == 'Пояснения' or layer.name == 'Разметка':
                 layer.visible = False
 
-        # packagingSpreads(ps, doc, jpeg_options, folder_path, jpeg_filenames, image_teacher_path, output_path, prefix="01")
+        packagingSpreads(ps, doc, jpeg_options, folder_path,
+                         jpeg_filenames, image_teacher_path, output_path)
 
-        evenNumberPages = packingLists(ps, doc, jpeg_options, folder_lists_path, lists_jpeg_filenames, output_path, 2)
+        packingLists(ps, doc, jpeg_options, folder_lists_path,
+                                       lists_jpeg_filenames, output_path, 2)
 
+        packingLastListsWithGroupPages(ps, doc, jpeg_options,
+                                       lists_jpeg, groups_jpeg, output_path)
         for group in groups_jpeg:
-            deleteUnwantedLayers(doc, ["Фон", "Разметка", "Пояснения"])
-            fillLayer(ps, doc, "Фон", group["design"])
-            packagingGroup(ps, doc, jpeg_options, group["folder_path"], group["jpeg_filenames"], output_path, folder_lists_path,
-                           lists_jpeg_filenames, individual_path_list, jpeg_filenames_individual_list, evenNumberPages,
+            deleteUnwantedLayers(doc, layersCannotRemoved)
+            fillLayer(ps, doc, paintLayer, design)
+            packagingGroup(ps, doc, jpeg_options, folder_group_path, group["jpeg_filenames"], output_path,
+                           folder_lists_path,
+                           lists_jpeg_filenames, individual_path_list, jpeg_filenames_individual_list,
                            len(lists_jpeg_filenames) // 2 + 2, postfix=group["postfix"])
-
-if __name__ == '__main__':
-    packege()

@@ -17,7 +17,7 @@ def fillLayer(ps, doc, layer_name, color):
         fill_color.rgb.red = 0
         fill_color.rgb.green = 0
         fill_color.rgb.blue = 0
-    elif color.lower() == 'white':
+    elif color.lower() == 'light':
         fill_color.rgb.red = 255
         fill_color.rgb.green = 255
         fill_color.rgb.blue = 255
@@ -70,7 +70,8 @@ def placeAndResizeImage(ps, active_document, image_path, resize=False, edge='l')
     placed_layer.translate(new_x, 0)
 
 
-def packagingSpreads(ps, active_document, jpeg_options, folder_path, jpeg_filenames, teacher_path, output_path, prefix):
+def packagingSpreads(ps, active_document, jpeg_options, folder_path, jpeg_filenames, teacher_path, output_path,
+                     prefix="01"):
     photo_names = generateStrings(prefix, 1, len(jpeg_filenames))
     placeAndResizeImage(ps, active_document, image_path=teacher_path, resize=True, edge='r')
     for i in range(len(jpeg_filenames)):
@@ -90,66 +91,62 @@ def packingLists(ps, active_document, jpeg_options, folder_path, jpeg_filenames,
                             edge='r')
         active_document.saveAs(f"{output_path}/{photo_names[indexName]}.jpg", jpeg_options, asCopy=True)
         indexName += 1
-    return not len(jpeg_filenames) % 2
 
 
-def packagingGroup(ps, active_document, jpeg_options, folder_path, jpeg_filenames, output_path, folder_path_list,
-                   jpeg_filenames_list, individual_path_list, jpeg_filenames_individual_list, even_pages, prefix,
-                   postfix):
-    count_Jpeg = len(jpeg_filenames)
-    photo_names = generatePrefixes(prefix, count_Jpeg // 2 + (count_Jpeg % 2 != 0), postfix)
+
+def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
+                                   lists_jpeg,
+                                   groups_jpeg,
+                                   output_path):
+    if not lists_jpeg or not groups_jpeg:
+        return
+
+    count_list_pages = len(lists_jpeg[0]["jpeg_filenames"])
+
+    prefix = f"{count_list_pages // 2 + count_list_pages % 2 + 1}"
+    prefix = prefix if len(prefix) != 1 else f"0{prefix}"
+    if count_list_pages % 2 == 0:
+        for i in range(1, len(lists_jpeg)):
+            placeAndResizeImage(ps, active_document,
+                                image_path=f"{lists_jpeg[0]['folder_path']}/{lists_jpeg[0]['jpeg_filenames'][-2]}",
+                                resize=True,
+                                edge='l')
+            placeAndResizeImage(ps, active_document,
+                                image_path=f"{lists_jpeg[i]['folder_path']}/{lists_jpeg[i]['jpeg_filenames'][-1]}",
+                                resize=True,
+                                edge='r')
+            active_document.saveAs(f"{output_path}/{prefix}-{lists_jpeg[i]['postfix']}.jpg", jpeg_options,
+                                   asCopy=True)
+    else:
+        for list in lists_jpeg:
+            group_image = groups_jpeg[0]
+            for group in groups_jpeg:
+                if list['postfix'] == group['postfix']:
+                    group_image = group
+                    break
+            placeAndResizeImage(ps, active_document,
+                                image_path=f"{list['folder_path']}/{list['jpeg_filenames'][-1]}", resize=True,
+                                edge='l')
+            placeAndResizeImage(ps, active_document,
+                                image_path=f"{group_image['folder_path']}/{group_image['jpeg_filenames'][0]}",
+                                resize=False,
+                                edge='r')
+            active_document.saveAs(f"{output_path}/{prefix}-{list['postfix']}.jpg", jpeg_options,
+                                   asCopy=True)
+
+
+def packagingGroup(ps, active_document, jpeg_options, folder_path, jpeg_filenames, output_path, prefix,
+                   postfix, album_version):
+    count_group_pages = len(jpeg_filenames)
+
+    # if album_version == "prem": checkLastPagePremAlbum
+
+    photo_names = generatePrefixes(prefix, count_group_pages // 2 + (count_group_pages % 2 != 0), postfix)
     indexPhoto = 0
     indexName = 0
-    if postfix != "000" and individual_path_list and any(
-            postfix.lstrip('0') in filename for filename in jpeg_filenames_individual_list):
-        if not even_pages:
-            if count_Jpeg % 2:
-                for jpeg_filename in jpeg_filenames_individual_list:
-                    filename = jpeg_filename.split('.')[0]
-                    for name in filename.split(' '):
-                        if postfix.lstrip('0') == name:
-                            placeAndResizeImage(ps, active_document,
-                                                image_path=f"{individual_path_list}/{jpeg_filename}", resize=True,
-                                                edge='l')
-                            placeAndResizeImage(ps, active_document,
-                                                image_path=f"{folder_path}/{jpeg_filenames[indexPhoto]}", resize=False,
-                                                edge='r')
-                            active_document.saveAs(f"{output_path}/{photo_names[indexPhoto]}.jpg", jpeg_options,
-                                                   asCopy=True)
-                            indexPhoto += 1
-                            indexName += 1
-            else:
-                return
-        else:
-            for jpeg_filename in jpeg_filenames_individual_list:
-                filename = jpeg_filename.split('.')
-                for name in filename:
-                    for index in name.split(' '):
-                        if postfix.lstrip('0') == index:
-                            placeAndResizeImage(ps, active_document,
-                                                image_path=f"{folder_path_list}/{jpeg_filenames_list[-2]}", resize=True,
-                                                edge='l')
-                            placeAndResizeImage(ps, active_document,
-                                                image_path=f"{individual_path_list}/{jpeg_filename}", resize=True,
-                                                edge='r')
-                            left_part, right_part = photo_names[indexPhoto].split('-')
-                            left_part = str(int(left_part) - 1).zfill(len(left_part))
-                            active_document.saveAs(f"{output_path}/{left_part}-{right_part}.jpg", jpeg_options,
-                                                   asCopy=True)
-    else:
-        if not even_pages:
-            if count_Jpeg % 2:
-                placeAndResizeImage(ps, active_document, image_path=f"{folder_path_list}/{jpeg_filenames_list[-1]}",
-                                    resize=True, edge='l')
-                placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[indexPhoto]}",
-                                    resize=False, edge='r')
-                active_document.saveAs(f"{output_path}/{photo_names[indexPhoto]}.jpg", jpeg_options, asCopy=True)
-                indexPhoto += 1
-                indexName += 1
-            else:
-                return
+
     deleteUnwantedLayers(active_document, ["Фон", "Разметка", "Пояснения"])
-    for i in range(indexPhoto, count_Jpeg - 1, 2):
+    for i in range(indexPhoto, count_group_pages - 1, 2):
         placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=False,
                             edge='l')
         placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i + 1]}", resize=False,
