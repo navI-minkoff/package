@@ -135,14 +135,15 @@ def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
                                    asCopy=True)
 
 
-def packagingGroup(ps, active_document, jpeg_options, folder_path, jpeg_filenames, output_path, prefix,
-                   postfix, album_version):
+def packagingGroup(ps, active_document, jpeg_options,
+                   folder_path, jpeg_filenames, output_path,
+                   prefix, postfix, album_version, lists_is_odd):
     count_group_pages = len(jpeg_filenames)
 
     # if album_version == "prem": checkLastPagePremAlbum
 
     photo_names = generatePrefixes(prefix, count_group_pages // 2 + (count_group_pages % 2 != 0), postfix)
-    indexPhoto = 0
+    indexPhoto = 0 if lists_is_odd else 1
     indexName = 0
 
     deleteUnwantedLayers(active_document, ["Фон", "Разметка", "Пояснения"])
