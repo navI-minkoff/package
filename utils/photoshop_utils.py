@@ -1,4 +1,8 @@
 from utils.naming_utils import generateStrings, generatePrefixes
+from PIL import Image
+
+layersCannotRemoved = ["Фон", "Разметка", "Пояснения"]
+paintLayer = "Фон"
 
 
 def fillLayer(ps, doc, layer_name, color):
@@ -93,7 +97,6 @@ def packingLists(ps, active_document, jpeg_options, folder_path, jpeg_filenames,
         indexName += 1
 
 
-
 def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
                                    lists_jpeg,
                                    groups_jpeg,
@@ -101,18 +104,18 @@ def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
     if not lists_jpeg or not groups_jpeg:
         return
 
-    count_list_pages = len(lists_jpeg[0]["jpeg_filenames"])
+    count_list_pages = len(lists_jpeg[0]["group_jpeg_filenames"])
 
     prefix = f"{count_list_pages // 2 + count_list_pages % 2 + 1}"
     prefix = prefix if len(prefix) != 1 else f"0{prefix}"
     if count_list_pages % 2 == 0:
         for i in range(1, len(lists_jpeg)):
             placeAndResizeImage(ps, active_document,
-                                image_path=f"{lists_jpeg[0]['folder_path']}/{lists_jpeg[0]['jpeg_filenames'][-2]}",
+                                image_path=f"{lists_jpeg[0]['group_folder_path']}/{lists_jpeg[0]['group_jpeg_filenames'][-2]}",
                                 resize=True,
                                 edge='l')
             placeAndResizeImage(ps, active_document,
-                                image_path=f"{lists_jpeg[i]['folder_path']}/{lists_jpeg[i]['jpeg_filenames'][-1]}",
+                                image_path=f"{lists_jpeg[i]['group_folder_path']}/{lists_jpeg[i]['group_jpeg_filenames'][-1]}",
                                 resize=True,
                                 edge='r')
             active_document.saveAs(f"{output_path}/{prefix}-{lists_jpeg[i]['postfix']}.jpg", jpeg_options,
@@ -125,32 +128,42 @@ def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
                     group_image = group
                     break
             placeAndResizeImage(ps, active_document,
-                                image_path=f"{list['folder_path']}/{list['jpeg_filenames'][-1]}", resize=True,
+                                image_path=f"{list['group_folder_path']}/{list['group_jpeg_filenames'][-1]}",
+                                resize=True,
                                 edge='l')
             placeAndResizeImage(ps, active_document,
-                                image_path=f"{group_image['folder_path']}/{group_image['jpeg_filenames'][0]}",
+                                image_path=f"{group_image['group_folder_path']}/{group_image['group_jpeg_filenames'][0]}",
                                 resize=False,
                                 edge='r')
             active_document.saveAs(f"{output_path}/{prefix}-{list['postfix']}.jpg", jpeg_options,
                                    asCopy=True)
 
 
+def checkLastPagePremAlbum(image: Image):
+    width, height = image.size
+    return width > height
+
+
 def packagingGroup(ps, active_document, jpeg_options,
-                   folder_path, jpeg_filenames, output_path,
+                   group_folder_path, group_jpeg_filenames, output_path,
                    prefix, postfix, album_version, lists_is_odd):
-    count_group_pages = len(jpeg_filenames)
-
-    # if album_version == "prem": checkLastPagePremAlbum
-
+    count_group_pages = len(group_jpeg_filenames)
     photo_names = generatePrefixes(prefix, count_group_pages // 2 + (count_group_pages % 2 != 0), postfix)
     indexPhoto = 0 if lists_is_odd else 1
     indexName = 0
 
-    deleteUnwantedLayers(active_document, ["Фон", "Разметка", "Пояснения"])
+    if count_group_pages % 2 and indexPhoto == 0 and \
+            not (album_version == "prem" and checkLastPagePremAlbum(
+                Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}"))):
+        return
+
+    deleteUnwantedLayers(active_document, layersCannotRemoved)
     for i in range(indexPhoto, count_group_pages - 1, 2):
-        placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=False,
+        placeAndResizeImage(ps, active_document, image_path=f"{group_folder_path}/{group_jpeg_filenames[i]}",
+                            resize=False,
                             edge='l')
-        placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i + 1]}", resize=False,
+        placeAndResizeImage(ps, active_document, image_path=f"{group_folder_path}/{group_jpeg_filenames[i + 1]}",
+                            resize=False,
                             edge='r')
         active_document.saveAs(f"{output_path}/{photo_names[indexName]}.jpg", jpeg_options, asCopy=True)
         indexName += 1
