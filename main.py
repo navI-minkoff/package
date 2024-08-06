@@ -1,3 +1,5 @@
+import os
+
 from photoshop import Session
 
 from utils.photoshop_utils import packagingSpreads, packingLists, packagingGroup, deleteUnwantedLayers, fillLayer, \
@@ -5,54 +7,68 @@ from utils.photoshop_utils import packagingSpreads, packingLists, packagingGroup
 from utils.file_utils import getJpegFilenames, extractNumber
 from utils.naming_utils import generatePrefixes
 
+
 # layersCannotRemoved = ["Фон", "Разметка", "Пояснения"]
 # paintLayer = "Фон"
 
 
-def package(folder_path, folder_group_path, image_teacher_path,
-            folder_lists_path, individual_path_list=None):
-    global jpeg_filenames_individual_list, groups_jpeg, group_jpeg_filenames, jpeg_filenames, lists_jpeg_filenames
+def package(reversals_folder_path, image_teacher_path,
+            lists_jpeg, groups_jpeg, design=None):
     source_psd_path = "C:/programms/undr/page.psd"
     output_path = "C:/undr/2024/Школа №18 9Г/res"
 
-    groups_jpeg = []
-    lists_jpeg = []
     design = "light"  # dark
 
     album_version = "med"  # min/prem
 
-    try:
-        jpeg_filenames = sorted(getJpegFilenames(folder_path), key=extractNumber)
+    # try:
+    #
+    #
+    # lists_jpeg_filenames = sorted(getJpegFilenames(lists_jpeg), key=extractNumber)
 
-        lists_jpeg_filenames = sorted(getJpegFilenames(folder_lists_path), key=extractNumber)
+    # individual_path_list = "C:/programms/undr/lists1/"
+    # jpeg_filenames_individual_list = getJpegFilenames(individual_path_list)
 
-        # individual_path_list = "C:/programms/undr/lists1/"
-        # jpeg_filenames_individual_list = getJpegFilenames(individual_path_list)
+    # group_jpeg_filenames = sorted(getJpegFilenames(groups_jpeg), key=extractNumber)
 
-        group_jpeg_filenames = sorted(getJpegFilenames(folder_group_path), key=extractNumber)
+    # group1_jpeg_filenames = sorted(getJpegFilenames(folder_group1_path), key=extractNumber)
+    #
+    # group2_jpeg_filenames = sorted(getJpegFilenames(folder_group2_path), key=extractNumber)
+    #
+    #
+    # except ValueError as e:
+    #     print("Ошибка:", e)
 
-        # group1_jpeg_filenames = sorted(getJpegFilenames(folder_group1_path), key=extractNumber)
-        #
-        # group2_jpeg_filenames = sorted(getJpegFilenames(folder_group2_path), key=extractNumber)
+    # groups_jpeg = [
+    #     {"groups_jpeg": "C:/programms/undr/group",
+    #      "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group"), key=extractNumber),
+    #      "postfix": "000"}
+    #     # {"groups_jpeg": "C:/programms/undr/group1",
+    #     #  "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group1"), key=extractNumber), "postfix": "001"}
+    # ]
+    #
+    # lists_jpeg = [
+    #     {"lists_folder_path": "C:/programms/undr/lists",
+    #      "lists_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists"), key=extractNumber),
+    #      "postfix": "000"}
+    #     # {"groups_jpeg": "C:/programms/undr/lists1",
+    #     #  "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists1"), key=extractNumber), "postfix": "001"}
+    #
+    # ]
+    # individual_group_folders = os.listdir("C:/programms/undr/group1")
+    # for folder in individual_group_folders:
+    #     path = "C:/programms/undr/group1" + f"/{folder}"
+    #     groups_jpeg.append(
+    #         {"groups_jpeg": path, "group_jpeg_filenames": sorted(getJpegFilenames(path), key=extractNumber),
+    #          "postfix": folder.split(' ')[0].zfill(3)})
+    #
+    # individual_list_jpegs = os.listdir("C:/programms/undr/lists1")
+    # for list_jpeg in individual_list_jpegs:
+    #     path = "C:/programms/undr/lists1"
+    #     lists_jpeg.append(
+    #         {"lists_folder_path": path, "lists_jpeg_filenames": [list_jpeg],
+    #          "postfix": list_jpeg.split(' ')[0].zfill(3)})
 
-
-    except ValueError as e:
-        print("Ошибка:", e)
-
-    groups_jpeg = [
-        {"group_folder_path": "C:/programms/undr/group",
-         "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group"), key=extractNumber), "postfix": "000"}
-        # {"group_folder_path": "C:/programms/undr/group1",
-        #  "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group1"), key=extractNumber), "postfix": "001"}
-    ]
-
-    lists_jpeg = [
-        {"group_folder_path": "C:/programms/undr/lists",
-         "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists"), key=extractNumber), "postfix": "000"}
-        # {"group_folder_path": "C:/programms/undr/lists1",
-        #  "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists1"), key=extractNumber), "postfix": "001"}
-
-    ]
     with Session(action="open", file_path=source_psd_path, auto_close=False, ps_version="2022") as ps:
         doc = ps.active_document
 
@@ -63,17 +79,21 @@ def package(folder_path, folder_group_path, image_teacher_path,
             if layer.name == 'Пояснения' or layer.name == 'Разметка':
                 layer.visible = False
 
-        packagingSpreads(ps, doc, jpeg_options, folder_path,
-                         jpeg_filenames, image_teacher_path, output_path)
+        # packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
+        #                  sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
+        #                  image_teacher_path,
+        #                  output_path)
 
-        packingLists(ps, doc, jpeg_options, folder_lists_path,
-                     lists_jpeg_filenames, output_path, 2)
+        packingLists(ps, doc, jpeg_options, lists_jpeg[0]['lists_folder_path'],
+                     lists_jpeg[0]['lists_jpeg_filenames'], output_path, 2)
 
         packingLastListsWithGroupPages(ps, doc, jpeg_options,
-                                       lists_jpeg, groups_jpeg, output_path)
+                                       lists_jpeg, groups_jpeg, output_path,
+                                       album_version)
         for group in groups_jpeg:
             deleteUnwantedLayers(doc, layersCannotRemoved)
             fillLayer(ps, doc, paintLayer, design)
-            packagingGroup(ps, doc, jpeg_options, group["group_folder_path"], group["group_jpeg_filenames"], output_path,
-                           len(lists_jpeg_filenames) // 2 + 2, postfix=group["postfix"],
-                           album_version="med", lists_is_odd=len(lists_jpeg[0]["group_jpeg_filenames"]) % 2)
+            packagingGroup(ps, doc, jpeg_options, group["groups_jpeg"], group["group_jpeg_filenames"],
+                           output_path,
+                           len(lists_jpeg[0]['lists_jpeg_filenames']) // 2 + 2, postfix=group["postfix"],
+                           album_version="med", lists_is_even=len(lists_jpeg[0]["lists_jpeg_filenames"]) % 2 == 0)

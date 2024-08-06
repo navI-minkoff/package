@@ -8,6 +8,7 @@ from functools import partial
 import flet as ft
 
 from main import package
+from utils.file_utils import getJpegFilenames, extractNumber
 
 
 def run_as_admin():
@@ -20,14 +21,46 @@ def front_main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
     def _package():
-        total_files = len(os.listdir(selected_path_reversals.value)) + \
-                      len(os.listdir(selected_path_lists.value)) / 2 + \
-                      len(os.listdir(selected_path_group.value)) / 2
+        lists_jpeg = [
+            {"lists_folder_path": selected_path_lists.value,
+             "lists_jpeg_filenames": sorted(getJpegFilenames(selected_path_lists.value), key=extractNumber),
+             "postfix": "000"}]
+
+        individual_list_jpegs = os.listdir(selected_path_individual_lists.value)
+        for list_jpeg in individual_list_jpegs:
+            lists_jpeg.append(
+                {"lists_folder_path": selected_path_individual_lists.value,
+                 "lists_jpeg_filenames": [list_jpeg],
+                 "postfix": list_jpeg.split(' ')[0].zfill(3)})
+
+        groups_jpeg = [
+            {"groups_jpeg": selected_path_group.value,
+             "group_jpeg_filenames": sorted(getJpegFilenames(selected_path_group.value), key=extractNumber),
+             "postfix": "000"}]
+
+        individual_group_folders = os.listdir(selected_path_individual_group.value)
+        for folder in individual_group_folders:
+            path = selected_path_individual_group.value + f"/{folder}"
+            groups_jpeg.append(
+                {"groups_jpeg": path, "group_jpeg_filenames": sorted(getJpegFilenames(path), key=extractNumber),
+                 "postfix": folder.split(' ')[0].zfill(3)})
+
+        all_group_pages = 0
+        for group in groups_jpeg:
+            all_group_pages += len(group['group_jpeg_filenames']) / 2
+
+        total_pages = len(os.listdir(selected_path_reversals.value)) + \
+                      len(lists_jpeg[0]['lists_jpeg_filenames']) / 2 + \
+                      len(lists_jpeg) - 1 + \
+                      all_group_pages
+
         run_as_admin()
-        start_monitoring(output_path, int(total_files))
-        package(folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
-                folder_lists_path=selected_path_lists.value, folder_group_path=selected_path_group.value)
+        start_monitoring(output_path, int(total_pages))
+        package(reversals_folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
+                lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg)
         stop_event.set()
+        progress_bar.value = 1.0
+        progress_bar.update()
         progress_bar_value.value = 'Finish'
         progress_bar_value.update()
 

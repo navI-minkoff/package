@@ -100,43 +100,46 @@ def packingLists(ps, active_document, jpeg_options, folder_path, jpeg_filenames,
 def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
                                    lists_jpeg,
                                    groups_jpeg,
-                                   output_path):
+                                   output_path, album_version):
     if not lists_jpeg or not groups_jpeg:
         return
 
-    count_list_pages = len(lists_jpeg[0]["group_jpeg_filenames"])
+    count_list_pages = len(lists_jpeg[0]["lists_jpeg_filenames"])
 
     prefix = f"{count_list_pages // 2 + count_list_pages % 2 + 1}"
     prefix = prefix if len(prefix) != 1 else f"0{prefix}"
     if count_list_pages % 2 == 0:
         for i in range(1, len(lists_jpeg)):
             placeAndResizeImage(ps, active_document,
-                                image_path=f"{lists_jpeg[0]['group_folder_path']}/{lists_jpeg[0]['group_jpeg_filenames'][-2]}",
+                                image_path=f"{lists_jpeg[0]['lists_folder_path']}/{lists_jpeg[0]['lists_jpeg_filenames'][-2]}",
                                 resize=True,
                                 edge='l')
             placeAndResizeImage(ps, active_document,
-                                image_path=f"{lists_jpeg[i]['group_folder_path']}/{lists_jpeg[i]['group_jpeg_filenames'][-1]}",
+                                image_path=f"{lists_jpeg[i]['lists_folder_path']}/{lists_jpeg[i]['lists_jpeg_filenames'][-1]}",
                                 resize=True,
                                 edge='r')
             active_document.saveAs(f"{output_path}/{prefix}-{lists_jpeg[i]['postfix']}.jpg", jpeg_options,
                                    asCopy=True)
     else:
-        for list in lists_jpeg:
-            group_image = groups_jpeg[0]
-            for group in groups_jpeg:
-                if list['postfix'] == group['postfix']:
-                    group_image = group
-                    break
-            placeAndResizeImage(ps, active_document,
-                                image_path=f"{list['group_folder_path']}/{list['group_jpeg_filenames'][-1]}",
-                                resize=True,
-                                edge='l')
-            placeAndResizeImage(ps, active_document,
-                                image_path=f"{group_image['group_folder_path']}/{group_image['group_jpeg_filenames'][0]}",
-                                resize=False,
-                                edge='r')
-            active_document.saveAs(f"{output_path}/{prefix}-{list['postfix']}.jpg", jpeg_options,
-                                   asCopy=True)
+        for group in groups_jpeg:
+            if len(group["group_jpeg_filenames"]) % 2 or \
+                    (album_version == "prem" and checkLastPagePremAlbum(
+                        Image.open(f"{group['groups_jpeg']}/{group['group_jpeg_filenames'][-1]}"))):
+                list_image = lists_jpeg[0]
+                for list_jpeg in lists_jpeg:
+                    if group['postfix'] == list_jpeg['postfix']:
+                        list_image = list_jpeg
+                        break
+                placeAndResizeImage(ps, active_document,
+                                    image_path=f"{list_image['lists_folder_path']}/{list_image['lists_jpeg_filenames'][-1]}",
+                                    resize=True,
+                                    edge='l')
+                placeAndResizeImage(ps, active_document,
+                                    image_path=f"{group['groups_jpeg']}/{group['group_jpeg_filenames'][0]}",
+                                    resize=False,
+                                    edge='r')
+                active_document.saveAs(f"{output_path}/{prefix}-{group['postfix']}.jpg", jpeg_options,
+                                       asCopy=True)
 
 
 def checkLastPagePremAlbum(image: Image):
@@ -146,10 +149,10 @@ def checkLastPagePremAlbum(image: Image):
 
 def packagingGroup(ps, active_document, jpeg_options,
                    group_folder_path, group_jpeg_filenames, output_path,
-                   prefix, postfix, album_version, lists_is_odd):
+                   prefix, postfix, album_version, lists_is_even):
     count_group_pages = len(group_jpeg_filenames)
-    photo_names = generatePrefixes(prefix, count_group_pages // 2 + (count_group_pages % 2 != 0), postfix)
-    indexPhoto = 0 if lists_is_odd else 1
+    indexPhoto = 0 if lists_is_even else 1
+    photo_names = generatePrefixes(prefix + indexPhoto, count_group_pages // 2 + (count_group_pages % 2 != 0), postfix)
     indexName = 0
 
     if count_group_pages % 2 and indexPhoto == 0 and \
