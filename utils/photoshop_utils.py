@@ -4,6 +4,9 @@ from PIL import Image
 layersCannotRemoved = ["Фон", "Разметка", "Пояснения"]
 paintLayer = "Фон"
 
+types_album = ['Мини/Медиум',
+               'Премиум']
+
 
 def fillLayer(ps, doc, layer_name, color):
     target_layer = None
@@ -123,7 +126,7 @@ def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
     else:
         for group in groups_jpeg:
             if len(group["group_jpeg_filenames"]) % 2 or \
-                    (album_version == "prem" and checkLastPagePremAlbum(
+                    (album_version == types_album[1] and checkLastPagePremAlbum(
                         Image.open(f"{group['groups_jpeg']}/{group['group_jpeg_filenames'][-1]}"))):
                 list_image = lists_jpeg[0]
                 for list_jpeg in lists_jpeg:
@@ -156,7 +159,7 @@ def packagingGroup(ps, active_document, jpeg_options,
     indexName = 0
 
     if count_group_pages % 2 and indexPhoto == 0 and \
-            not (album_version == "prem" and checkLastPagePremAlbum(
+            not (album_version == types_album[1] and checkLastPagePremAlbum(
                 Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}"))):
         return
 

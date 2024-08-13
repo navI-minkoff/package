@@ -13,7 +13,7 @@ from utils.naming_utils import generatePrefixes
 
 
 def package(reversals_folder_path, image_teacher_path,
-            lists_jpeg, groups_jpeg, design=None):
+            lists_jpeg, groups_jpeg, album_version=None):
     source_psd_path = "C:/programms/undr/page.psd"
     output_path = "C:/undr/2024/Школа №18 9Г/res"
 
@@ -79,10 +79,10 @@ def package(reversals_folder_path, image_teacher_path,
             if layer.name == 'Пояснения' or layer.name == 'Разметка':
                 layer.visible = False
 
-        # packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
-        #                  sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
-        #                  image_teacher_path,
-        #                  output_path)
+        packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
+                         sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
+                         image_teacher_path,
+                         output_path)
 
         packingLists(ps, doc, jpeg_options, lists_jpeg[0]['lists_folder_path'],
                      lists_jpeg[0]['lists_jpeg_filenames'], output_path, 2)
