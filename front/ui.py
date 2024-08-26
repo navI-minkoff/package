@@ -79,9 +79,9 @@ def front_main(page: ft.Page):
                       all_group_pages
         run_as_admin()
         start_monitoring(output_path, int(total_pages))
-        print(dropdown.value)
         package(reversals_folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
-                lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg, album_version=dropdown.value)
+                lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg, album_version=dropdown.value,
+                album_design=design_switcher.value)
         stop_event.set()
         progress_bar.value = 1.0
         progress_bar.update()
@@ -89,9 +89,9 @@ def front_main(page: ft.Page):
         progress_bar_value.update()
 
     def check_all_paths_specified(lists_jpeg, groups_jpeg):
-        if not selected_path_reversals.value or not selected_path_teacher.value\
+        if not selected_path_reversals.value or not selected_path_teacher.value \
                 or not lists_jpeg[0] or not groups_jpeg[0] \
-                or (elevated_button_individual_list in row_lists.controls and not lists_jpeg[1])\
+                or (elevated_button_individual_list in row_lists.controls and not lists_jpeg[1]) \
                 or (elevated_button_individual_group in row_group.controls and not groups_jpeg[1]):
             update_module.show_error_message('Укажите все пути')
             return True
@@ -156,10 +156,6 @@ def front_main(page: ft.Page):
     page.overlay.append(pick_path_individual_lists_dialog)
     page.overlay.append(pick_path_individual_group_dialog)
 
-    # page.overlay.append(error_container)
-
-    # Передача доступа к интерфейсу в другой модуль
-
     def switch_changed(e, elevated_button, text, row):
         if e.control.value:
             if elevated_button not in row.controls:
@@ -170,13 +166,6 @@ def front_main(page: ft.Page):
                 row.controls.remove(elevated_button)
                 row.controls.remove(text)
         page.update()
-
-    # def on_change(e):
-    #     if e.control.value == types_album[0]:
-    #         album_type = types_album[0]
-    #     else:
-    #         album_type = types_album[1]
-
 
     elevated_button_individual_list = ft.ElevatedButton(
         "Индивидуальные списки",
@@ -206,17 +195,27 @@ def front_main(page: ft.Page):
                                            selected_path_individual_group, row_group)
     )
 
+    design_switcher = ft.Switch(
+        label="Темный",
+        value=False,
+    )
     # Создание списка вариантов
     dropdown = ft.Dropdown(
         options=[
             ft.dropdown.Option(types_album[0]),
             ft.dropdown.Option(types_album[1]),
+            ft.dropdown.Option(types_album[2])
         ],
         height=buttons_height * 1.2,
         width=200,
         label="Вид альбома"
-        # on_change=on_change
     )
+
+    dropdown_switcher_row = ft.Row(controls=[dropdown,
+                                             ft.Text("  Светлый"),
+                                             design_switcher,
+                                             ],
+                                   )
 
     row_lists = ft.Row(
         [
@@ -270,7 +269,7 @@ def front_main(page: ft.Page):
         ),
         row_lists,
         row_group,
-        dropdown,
+        dropdown_switcher_row,
         ft.Row(
             [
                 ft.ElevatedButton(

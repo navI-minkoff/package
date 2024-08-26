@@ -13,13 +13,13 @@ from utils.naming_utils import generatePrefixes
 
 
 def package(reversals_folder_path, image_teacher_path,
-            lists_jpeg, groups_jpeg, album_version=None):
+            lists_jpeg, groups_jpeg, album_version, album_design=None):
     source_psd_path = "C:/programms/undr/page.psd"
     output_path = "C:/undr/2024/Школа №18 9Г/res"
 
-    design = "light"  # dark
+    album_design = "dark"  # dark = album_design
 
-    album_version = "med"  # min/prem
+    album_version = "med"  # min/prem = album_version
 
     # try:
     #
@@ -92,7 +92,7 @@ def package(reversals_folder_path, image_teacher_path,
                                        album_version)
         for group in groups_jpeg:
             deleteUnwantedLayers(doc, layersCannotRemoved)
-            fillLayer(ps, doc, paintLayer, design)
+            fillLayer(ps, doc, paintLayer, album_design)
             packagingGroup(ps, doc, jpeg_options, group["groups_jpeg"], group["group_jpeg_filenames"],
                            output_path,
                            len(lists_jpeg[0]['lists_jpeg_filenames']) // 2 + 2, postfix=group["postfix"],
