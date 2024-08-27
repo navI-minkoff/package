@@ -5,6 +5,7 @@ layersCannotRemoved = ["Фон", "Разметка", "Пояснения"]
 paintLayer = "Фон"
 
 types_album = ['Мини', 'Медиум', 'Премиум']
+designs_album = ['light', 'dark']
 
 
 def fillLayer(ps, doc, layer_name, color):
@@ -19,11 +20,11 @@ def fillLayer(ps, doc, layer_name, color):
 
     doc.activeLayer = target_layer
     fill_color = ps.SolidColor()
-    if color.lower() == 'dark':
+    if color.lower() == designs_album[1]:
         fill_color.rgb.red = 0
         fill_color.rgb.green = 0
         fill_color.rgb.blue = 0
-    elif color.lower() == 'light':
+    elif color.lower() == designs_album[0]:
         fill_color.rgb.red = 255
         fill_color.rgb.green = 255
         fill_color.rgb.blue = 255

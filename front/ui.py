@@ -1,4 +1,5 @@
 import ctypes
+import json
 import os
 import sys
 import threading
@@ -10,7 +11,7 @@ import flet as ft
 from main import package
 from utils import update_module
 from utils.file_utils import getJpegFilenames, extractNumber
-from utils.photoshop_utils import types_album
+from utils.photoshop_utils import types_album, designs_album
 
 buttons_height = 40
 
@@ -19,9 +20,38 @@ def run_as_admin():
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
 
 
+# Путь к файлу настроек
+SETTINGS_FILE = "../utils/settings.json"
+
+# Структура настроек по умолчанию
+default_settings = {
+    "file_path": "",
+    "theme": "dark"
+}
+
+
+# Функция для загрузки настроек из файла
+def load_settings():
+    if os.path.exists(SETTINGS_FILE):
+        with open(SETTINGS_FILE, "r") as f:
+            return json.load(f)
+    else:
+        return default_settings
+
+
+# Функция для сохранения настроек в файл
+def save_settings(settings):
+    with open(SETTINGS_FILE, "w") as f:
+        json.dump(settings, f)
+
+
+# Загружаем настройки при запуске приложения
+settings = load_settings()
+
+
 def front_main(page: ft.Page):
     page.title = "undr"
-    page.theme_mode = "dark"
+    page.theme_mode = settings["theme"]
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
     # Создание контейнера для вывода ошибок
@@ -35,6 +65,60 @@ def front_main(page: ft.Page):
         animate_opacity=300,  # Анимация исчезновения
         alignment=ft.alignment.bottom_right,
     )
+
+    # Функция для открытия диалогового окна настроек
+    def open_settings_dialog(e):
+        def pick_file_result(event):
+            settings["file_path"] = event.files[0].path if event.files else ""
+            file_path_text.value = settings["file_path"]
+            file_path_text.update()
+
+        file_picker = ft.FilePicker(on_result=pick_file_result)
+        file_path_text = ft.Text(settings["file_path"], width=300)
+
+        def save_and_close(e):
+            settings["theme"] = theme_dropdown.value
+            save_settings(settings)
+            settings_dialog.open = False
+            change_theme(e)
+            page.update()
+
+        def change_theme(e):
+            page.theme_mode = settings["theme"]
+            page.update()
+
+        theme_dropdown = ft.Dropdown(
+            options=[
+                ft.dropdown.Option("Light"),
+                ft.dropdown.Option("Dark"),
+            ],
+            value=settings["theme"],
+            label="Тема",
+        )
+
+        settings_dialog = ft.AlertDialog(
+            title=ft.Text("Настройки"),
+            content=ft.Column([
+                ft.Row([
+                    ft.Text("Путь к файлу:"),
+                    file_path_text,
+                    ft.IconButton(icon=ft.icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files())
+                ]),
+                theme_dropdown
+            ]),
+            actions=[
+                ft.TextButton("Сохранить", on_click=save_and_close)
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+        )
+
+        page.dialog = settings_dialog
+        settings_dialog.open = True
+        page.update()
+
+    def close_settings_dialog(dialog):
+        dialog.open = False
+        page.update()
 
     def _package():
 
@@ -81,7 +165,7 @@ def front_main(page: ft.Page):
         start_monitoring(output_path, int(total_pages))
         package(reversals_folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
                 lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg, album_version=dropdown.value,
-                album_design=design_switcher.value)
+                album_design=designs_album[1] if design_switcher.value else designs_album[0])
         stop_event.set()
         progress_bar.value = 1.0
         progress_bar.update()
@@ -244,6 +328,15 @@ def front_main(page: ft.Page):
     )
     progress_bar = ft.ProgressBar(value=0.0, color=ft.colors.WHITE, height=5, width=600)
     page.add(
+        ft.Row([ft.Text(''),
+                ft.IconButton(
+                    icon=ft.icons.SETTINGS,
+                    icon_size=30,
+                    on_click=open_settings_dialog,
+                    alignment=ft.alignment.center_right
+                ),
+                ],
+               alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
         ft.Row(
             [
                 ft.ElevatedButton(
@@ -252,8 +345,8 @@ def front_main(page: ft.Page):
                     icon=ft.icons.FOLDER_OPEN,
                     on_click=lambda _: pick_path_reversals_dialog.get_directory_path(),
                 ),
-                selected_path_reversals,
-            ],
+                selected_path_reversals]
+
         ),
         ft.Row(
             [
@@ -302,8 +395,8 @@ def front_main(page: ft.Page):
         progress_bar_value.update()
         page.update()
 
-    def monitor_folder(folder_path, total_files, stop_event):
-        while not stop_event.is_set():
+    def monitor_folder(folder_path, total_files, stop_event_progress_bar):
+        while not stop_event_progress_bar.is_set():
             current_files = len(os.listdir(folder_path))
             progress = current_files / total_files if total_files > 0 else 0
             update_progress(progress)

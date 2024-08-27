@@ -17,9 +17,9 @@ def package(reversals_folder_path, image_teacher_path,
     source_psd_path = "C:/programms/undr/page.psd"
     output_path = "C:/undr/2024/Школа №18 9Г/res"
 
-    album_design = "dark"  # dark = album_design
-
-    album_version = "med"  # min/prem = album_version
+    # album_design = "dark"  # dark = album_design
+    #
+    # album_version = "med"  # min/prem = album_version
 
     # try:
     #
