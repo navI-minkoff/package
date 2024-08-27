@@ -68,16 +68,26 @@ def front_main(page: ft.Page):
 
     # Функция для открытия диалогового окна настроек
     def open_settings_dialog(e):
-        def pick_file_result(event):
-            settings["file_path"] = event.files[0].path if event.files else ""
-            file_path_text.value = settings["file_path"]
-            file_path_text.update()
+        def pick_file_result(e: ft.FilePickerResultEvent):
+            if len(e.files) == 1:
+                psd_file_path_text.value = e.files[0].path
+            else:
+                psd_file_path_text.value = "Не выбрано!"
+            psd_file_path_text.update()
 
         file_picker = ft.FilePicker(on_result=pick_file_result)
-        file_path_text = ft.Text(settings["file_path"], width=300)
+        page.overlay.append(file_picker)
+        psd_file_path_text = ft.Text(settings["file_path"], width=300)
 
         def save_and_close(e):
             settings["theme"] = theme_dropdown.value
+            if not psd_file_path_text.value:
+                update_module.show_error_message("Не выбран psd файл")
+                return
+            elif psd_file_path_text.value.split('.')[-1] != 'psd':
+                update_module.show_error_message("Выберите файл формата psd")
+                return
+            settings["file_path"] = psd_file_path_text.value
             save_settings(settings)
             settings_dialog.open = False
             change_theme(e)
@@ -100,9 +110,9 @@ def front_main(page: ft.Page):
             title=ft.Text("Настройки"),
             content=ft.Column([
                 ft.Row([
-                    ft.Text("Путь к файлу:"),
-                    file_path_text,
-                    ft.IconButton(icon=ft.icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files())
+                    ft.Text("PSD файл:"),
+                    ft.IconButton(icon=ft.icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
+                    psd_file_path_text
                 ]),
                 theme_dropdown
             ]),
@@ -112,7 +122,7 @@ def front_main(page: ft.Page):
             actions_alignment=ft.MainAxisAlignment.END,
         )
 
-        page.dialog = settings_dialog
+        page.overlay.append(settings_dialog)
         settings_dialog.open = True
         page.update()
 
@@ -124,7 +134,6 @@ def front_main(page: ft.Page):
 
         if check_all_paths_specified([selected_path_lists.value] + [selected_path_individual_lists.value],
                                      [selected_path_group.value] + [selected_path_individual_group.value]):
-            print('No path')
             return
 
         lists_jpeg = [
