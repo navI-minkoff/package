@@ -1,3 +1,4 @@
+from utils import update_module
 from utils.naming_utils import generateStrings, generatePrefixes
 from PIL import Image
 
@@ -72,8 +73,10 @@ def placeAndResizeImage(ps, active_document, image_path, resize=False, edge='l')
         image_width = placed_layer.bounds[2] - placed_layer.bounds[0]
     if edge == 'l':
         new_x = -placed_layer.bounds[0] + doc_width / 2 - image_width
-    else:
+    elif edge == 'r':
         new_x = -placed_layer.bounds[0] + doc_width / 2
+    else:
+        new_x = 0
     placed_layer.translate(new_x, 0)
 
 
@@ -157,14 +160,23 @@ def packagingGroup(ps, active_document, jpeg_options,
     indexPhoto = 0 if lists_is_even else 1
     photo_names = generatePrefixes(prefix + indexPhoto, count_group_pages // 2 + (count_group_pages % 2 != 0), postfix)
     indexName = 0
+    count_group_pages -= indexPhoto
 
-    if count_group_pages % 2 and indexPhoto == 0 and \
-            not (album_version == types_album[2] and checkLastPagePremAlbum(
-                Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}"))):
-        return
+    # if count_group_pages % 2 and indexPhoto == 0 and \
+    #         not (album_version == types_album[2] and ((count_group_pages % 2 and checkLastPagePremAlbum(
+    #             Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}"))) or not count_group_pages % 2 and not checkLastPagePremAlbum(
+    #             Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}")))): #ПОФИКСИТЬ!!!!!
+    #     update_module.show_error_message('Неверное количесво фотографий')
+    #     return
+
+    if (count_group_pages % 2 and album_version != types_album[2]) or \
+        (count_group_pages % 2 == 0 and checkLastPagePremAlbum(
+        Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}"))):
+            update_module.show_error_message('Неверное количесво групповых фотографий')
+            return
 
     deleteUnwantedLayers(active_document, layersCannotRemoved)
-    for i in range(indexPhoto, count_group_pages - 1, 2):
+    for i in range(indexPhoto, count_group_pages + indexPhoto - 1, 2):
         placeAndResizeImage(ps, active_document, image_path=f"{group_folder_path}/{group_jpeg_filenames[i]}",
                             resize=False,
                             edge='l')
@@ -173,3 +185,10 @@ def packagingGroup(ps, active_document, jpeg_options,
                             edge='r')
         active_document.saveAs(f"{output_path}/{photo_names[indexName]}.jpg", jpeg_options, asCopy=True)
         indexName += 1
+
+    if count_group_pages % 2 and album_version == types_album[2] and checkLastPagePremAlbum(
+        Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}")):
+        placeAndResizeImage(ps, active_document, image_path=f"{group_folder_path}/{group_jpeg_filenames[-1]}",
+                            resize=False,
+                            edge='c')
+        active_document.saveAs(f"{output_path}/{photo_names[indexName]}.jpg", jpeg_options, asCopy=True)

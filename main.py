@@ -97,4 +97,4 @@ def package(reversals_folder_path, image_teacher_path,
             packagingGroup(ps, doc, jpeg_options, group["groups_jpeg"], group["group_jpeg_filenames"],
                            output_path,
                            len(lists_jpeg[0]['lists_jpeg_filenames']) // 2 + 2, postfix=group["postfix"],
-                           album_version="med", lists_is_even=len(lists_jpeg[0]["lists_jpeg_filenames"]) % 2 == 0)
+                           album_version=album_version, lists_is_even=len(lists_jpeg[0]["lists_jpeg_filenames"]) % 2 == 0)
