@@ -13,9 +13,10 @@ from utils.naming_utils import generatePrefixes
 
 
 def package(reversals_folder_path, image_teacher_path,
-            lists_jpeg, groups_jpeg, album_version, album_design=None):
-    source_psd_path = "C:/programms/undr/page.psd"
-    output_path = "C:/undr/2024/Школа №18 9Г/res"
+            lists_jpeg, groups_jpeg, output_path, source_psd_path,
+            album_version, album_design=None):
+    # source_psd_path = "C:/programms/undr/page.psd"
+    # output_path = "C:/undr/2024/Школа №18 9Г/res"
 
     # album_design = "dark"  # dark = album_design
     #

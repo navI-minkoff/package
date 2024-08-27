@@ -171,9 +171,11 @@ def front_main(page: ft.Page):
                       len(lists_jpeg) - 1 + \
                       all_group_pages
         run_as_admin()
-        start_monitoring(output_path, int(total_pages))
+        start_monitoring(selected_path_output.value, int(total_pages))
         package(reversals_folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
-                lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg, album_version=dropdown.value,
+                lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg,
+                output_path=selected_path_output.value, source_psd_path=settings["file_path"],
+                album_version=dropdown.value,
                 album_design=designs_album[1] if design_switcher.value else designs_album[0])
         stop_event.set()
         progress_bar.value = 1.0
@@ -182,14 +184,18 @@ def front_main(page: ft.Page):
         progress_bar_value.update()
 
     def check_all_paths_specified(lists_jpeg, groups_jpeg):
+        if not settings["file_path"]:
+            update_module.show_error_message("Не выбран psd файл")
+            return True
         if not selected_path_reversals.value or not selected_path_teacher.value \
                 or not lists_jpeg[0] or not groups_jpeg[0] \
                 or (elevated_button_individual_list in row_lists.controls and not lists_jpeg[1]) \
-                or (elevated_button_individual_group in row_group.controls and not groups_jpeg[1]):
+                or (elevated_button_individual_group in row_group.controls and not groups_jpeg[1])\
+                or not selected_path_output.value:
             update_module.show_error_message('Укажите все пути')
             return True
         if not dropdown.value:
-            update_module.show_error_message('Выберите вариант альбома')
+            update_module.show_error_message('Выберите вид альбома')
             return True
 
         return False
@@ -221,6 +227,10 @@ def front_main(page: ft.Page):
         selected_path_individual_lists.value = e.path
         selected_path_individual_lists.update()
 
+    def pick_path_output_result(e: ft.FilePickerResultEvent):
+        selected_path_output.value = e.path
+        selected_path_output.update()
+
     pick_path_reversals_dialog = ft.FilePicker(on_result=pick_path_reversals_result)
     selected_path_reversals = ft.Text()
 
@@ -239,8 +249,10 @@ def front_main(page: ft.Page):
     pick_path_individual_group_dialog = ft.FilePicker(on_result=pick_path_individual_group_result)
     selected_path_individual_group = ft.Text()
 
+    pick_path_output_dialog = ft.FilePicker(on_result=pick_path_output_result)
+    selected_path_output = ft.Text()
+
     progress_bar_value = ft.Text()
-    album_type = ''
 
     page.overlay.append(pick_path_reversals_dialog)
     page.overlay.append(pick_path_teacher_dialog)
@@ -248,6 +260,7 @@ def front_main(page: ft.Page):
     page.overlay.append(pick_path_group_dialog)
     page.overlay.append(pick_path_individual_lists_dialog)
     page.overlay.append(pick_path_individual_group_dialog)
+    page.overlay.append(pick_path_output_dialog)
 
     def switch_changed(e, elevated_button, text, row):
         if e.control.value:
@@ -360,7 +373,7 @@ def front_main(page: ft.Page):
         ft.Row(
             [
                 ft.ElevatedButton(
-                    "Учительница",
+                    "Учителя",
                     height=buttons_height,
                     icon=ft.icons.FOLDER_OPEN,
                     on_click=lambda _: pick_path_teacher_dialog.pick_files(
@@ -373,17 +386,25 @@ def front_main(page: ft.Page):
         row_group,
         dropdown_switcher_row,
         ft.Row(
-            [
-                ft.ElevatedButton(
-                    "Печать",
-                    height=buttons_height,
-                    icon=ft.icons.PRINT,
-                    on_click=lambda _: _package()
-                ),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER
-        ),
-    )
+            [ft.ElevatedButton(
+                "Результат",
+                height=buttons_height,
+                icon=ft.icons.FOLDER_OPEN,
+                on_click=lambda _: pick_path_output_dialog.get_directory_path(),
+            ),
+                selected_path_output]),
+            ft.Row(
+                [
+                    ft.ElevatedButton(
+                        "Упаковка",
+                        height=buttons_height,
+                        icon=ft.icons.PRINT,
+                        on_click=lambda _: _package()
+                    ),
+                ],
+                alignment=ft.MainAxisAlignment.CENTER
+            ),
+        )
 
     page.add(ft.Row([switch1]),
              ft.Row([switch2]),
@@ -417,8 +438,7 @@ def front_main(page: ft.Page):
         monitor_thread.start()
 
     stop_event = threading.Event()
-    output_path = "C:/undr/2024/Школа №18 9Г/res"
-    update_module.init(error_container)
 
+    update_module.init(error_container)
 
 ft.app(target=front_main)
