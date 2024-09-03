@@ -15,5 +15,16 @@ def getJpegFilenames(folder_path):
     return jpeg_files
 
 
+def getNameByNumberSpreads(count_spreads):
+    name = 'разворот'
+    count_spreads %= 10
+    if count_spreads >= 2 and count_spreads <= 4:
+        name += 'а'
+    elif (count_spreads >= 5 and count_spreads <= 9) or count_spreads == 0:
+        name += 'ов'
+
+    return name
+
+
 def extractNumber(filename):
     return int(filename.split('.')[0])

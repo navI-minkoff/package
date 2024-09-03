@@ -6,7 +6,8 @@ layersCannotRemoved = ["Фон", "Разметка", "Пояснения"]
 paintLayer = "Фон"
 
 types_album = ['Мини', 'Медиум', 'Премиум']
-designs_album = ['light', 'dark']
+designs_album = ['Светлый', 'Темный']
+shared_postfix = '-000.jpg'
 
 
 def fillLayer(ps, doc, layer_name, color):

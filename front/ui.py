@@ -26,7 +26,7 @@ SETTINGS_FILE = "../utils/settings.json"
 # Структура настроек по умолчанию
 default_settings = {
     "file_path": "",
-    "theme": "dark"
+    "theme": "Dark"
 }
 
 
