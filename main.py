@@ -80,7 +80,6 @@ def moveAndCopyFiles(source_dir, destination_dir, files_to_copy=None, files_to_m
             else:
                 print(f"Файл {filename} не найден в {destination_dir}")
 
-    print("Перемещение и копирование файлов завершено.")
 
 
 def getFileWithDefiniteEnding(filenames, endswith, initially=True):
@@ -117,12 +116,11 @@ def distributionByNumberReversals(output_path, first_shared_list, last_shared_li
                          files_to_copy=shared_lists,
                          files_to_move=files_for_move)
 
-        number_last_reversal = int(getFileWithDefiniteEnding(filenames, shared_postfix, False).split('-')[0])
-        moveAndCopyFiles(output_path,
-                         output_path + '/' + f'{number_last_reversal} ' + getNameByNumberSpreads(number_last_reversal),
-                         files_to_move=shared_titles + shared_lists + shared_group)
+    number_last_reversal = int(getFileWithDefiniteEnding(filenames, shared_postfix, False).split('-')[0])
+    moveAndCopyFiles(output_path,
+                     output_path + '/' + f'{number_last_reversal} ' + getNameByNumberSpreads(number_last_reversal),
+                     files_to_move=shared_titles + shared_lists + shared_group)
 
-    print(os.listdir(output_path))
     reversals_folders = [f for f in os.listdir(output_path) if not 'jpg' in f]
     for folder in reversals_folders:
         namingInOrder(output_path + '/' + folder)
@@ -131,9 +129,6 @@ def distributionByNumberReversals(output_path, first_shared_list, last_shared_li
 def package(reversals_folder_path, image_teacher_path,
             lists_jpeg, groups_jpeg, output_path, source_psd_path,
             album_version, album_design=None):
-    output_path = os.path.join(output_path, album_version, album_design)
-    os.makedirs(output_path, exist_ok=True)
-
     with Session(action="open", file_path=source_psd_path, auto_close=False, ps_version="2022") as ps:
         doc = ps.active_document
 
@@ -156,8 +151,10 @@ def package(reversals_folder_path, image_teacher_path,
                                        lists_jpeg, groups_jpeg, output_path,
                                        album_version)
 
-        first_file_from_shared_lists = getFileWithDefiniteEnding(output_path, shared_postfix, True)
-        last_file_from_shared_lists = getFileWithDefiniteEnding(output_path, shared_postfix, False)
+        first_file_from_shared_lists = getFileWithDefiniteEnding(sorted(getJpegFilenames(f"{output_path}")),
+                                                                 shared_postfix, True)
+        last_file_from_shared_lists = getFileWithDefiniteEnding(sorted(getJpegFilenames(f"{output_path}")),
+                                                                shared_postfix, False)
         for group in groups_jpeg:
             deleteUnwantedLayers(doc, layersCannotRemoved)
             fillLayer(ps, doc, paintLayer, album_design)
@@ -167,4 +164,4 @@ def package(reversals_folder_path, image_teacher_path,
                            album_version=album_version,
                            lists_is_even=len(lists_jpeg[0]["lists_jpeg_filenames"]) % 2 == 0)
 
-        # distributionByNumberReversals(output_path, first_file_from_shared_lists, last_file_from_shared_lists)
+        distributionByNumberReversals(output_path, first_file_from_shared_lists, last_file_from_shared_lists)

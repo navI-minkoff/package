@@ -178,12 +178,17 @@ def front_main(page: ft.Page):
                       len(lists_jpeg) - 1 + \
                       all_group_pages
         run_as_admin()
-        start_monitoring(selected_path_output.value, int(total_pages))
+        album_design = designs_album[1] if design_switcher.value else designs_album[0]
+
+        full_output_path = os.path.join(selected_path_output.value, dropdown.value, album_design)
+        os.makedirs(full_output_path, exist_ok=True)
+
+        start_monitoring(full_output_path, int(total_pages))
         package(reversals_folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
                 lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg,
-                output_path=selected_path_output.value, source_psd_path=settings["file_path"],
+                output_path=full_output_path, source_psd_path=settings["file_path"],
                 album_version=dropdown.value,
-                album_design=designs_album[1] if design_switcher.value else designs_album[0])
+                album_design=album_design)
         stop_event.set()
         update_progress_bar(1.0, 'Finish')
 
