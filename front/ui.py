@@ -45,8 +45,9 @@ def save_settings(settings):
         json.dump(settings, f)
 
 
-# Загружаем настройки при запуске приложения
 settings = load_settings()
+stop_package_thread = False
+stop_package_event = threading.Event()
 
 
 def front_main(page: ft.Page):
@@ -130,6 +131,12 @@ def front_main(page: ft.Page):
         dialog.open = False
         page.update()
 
+    def update_progress_bar(value, status):
+        progress_bar.value = value
+        progress_bar.update()
+        progress_bar_value.value = status
+        progress_bar_value.update()
+
     def _package():
 
         if check_all_paths_specified([selected_path_lists.value] + [selected_path_individual_lists.value],
@@ -178,10 +185,7 @@ def front_main(page: ft.Page):
                 album_version=dropdown.value,
                 album_design=designs_album[1] if design_switcher.value else designs_album[0])
         stop_event.set()
-        progress_bar.value = 1.0
-        progress_bar.update()
-        progress_bar_value.value = 'Finish'
-        progress_bar_value.update()
+        update_progress_bar(1.0, 'Finish')
 
     def check_all_paths_specified(lists_jpeg, groups_jpeg):
         if not settings["file_path"]:
@@ -190,7 +194,7 @@ def front_main(page: ft.Page):
         if not selected_path_reversals.value or not selected_path_teacher.value \
                 or not lists_jpeg[0] or not groups_jpeg[0] \
                 or (elevated_button_individual_list in row_lists.controls and not lists_jpeg[1]) \
-                or (elevated_button_individual_group in row_group.controls and not groups_jpeg[1])\
+                or (elevated_button_individual_group in row_group.controls and not groups_jpeg[1]) \
                 or not selected_path_output.value:
             update_module.show_error_message('Укажите все пути')
             return True
@@ -393,18 +397,18 @@ def front_main(page: ft.Page):
                 on_click=lambda _: pick_path_output_dialog.get_directory_path(),
             ),
                 selected_path_output]),
-            ft.Row(
-                [
-                    ft.ElevatedButton(
-                        "Упаковка",
-                        height=buttons_height,
-                        icon=ft.icons.PRINT,
-                        on_click=lambda _: _package()
-                    ),
-                ],
-                alignment=ft.MainAxisAlignment.CENTER
-            ),
-        )
+        ft.Row(
+            [
+                ft.ElevatedButton(
+                    "Упаковка",
+                    height=buttons_height,
+                    icon=ft.icons.PRINT,
+                    on_click=lambda _: _package()
+                ),
+            ],
+            alignment=ft.MainAxisAlignment.CENTER
+        ),
+    )
 
     page.add(ft.Row([switch1]),
              ft.Row([switch2]),
@@ -415,7 +419,15 @@ def front_main(page: ft.Page):
              ft.Row([progress_bar_value],
                     alignment=ft.MainAxisAlignment.CENTER),
              ft.Row([error_container],
-                    alignment=ft.MainAxisAlignment.END)
+                    alignment=ft.MainAxisAlignment.END),
+             # ft.Row([ft.ElevatedButton(
+             #     "Стоп",
+             #     height=buttons_height,
+             #     icon=ft.icons.STOP,
+             #     on_click=lambda _: stop_package()
+             # ),
+             # ],
+             #     alignment=ft.MainAxisAlignment.END)
              )
 
     def update_progress(value):
@@ -440,5 +452,6 @@ def front_main(page: ft.Page):
     stop_event = threading.Event()
 
     update_module.init(error_container)
+
 
 ft.app(target=front_main)

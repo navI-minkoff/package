@@ -1,3 +1,4 @@
+import chunk
 import os
 import shutil
 
@@ -13,8 +14,8 @@ def renameFile(old_name, new_name):
     """
     Переименовывает файл old_name в новый new_name.
 
-    :param old_name: Путь к исходному файлу (старое имя)
-    :param new_name: Путь к новому файлу (новое имя)
+    :param old_name: Путь к исходному файлу
+    :param new_name: Путь к новому файлу
     """
     try:
         os.rename(old_name, new_name)
@@ -34,13 +35,19 @@ def namingInOrder(source_dir):
     filenames = getJpegFilenames(source_dir)
     reversals = [i for i in filenames if i.split('-')[0] == '01']
 
-    for i in range(1, len(reversals) + 1):
-        index = i - 1
-        if int(reversals[index].split('-')[1].split('.')[0]) != i:
-            files_for_rename = [f for f in filenames if f.split('-')[1] == reversals[index].split('-')[1]]
+    renameIndex = len(reversals) - 1
+    readIndex = 0
+    nameIndex = 0
+    while readIndex <= renameIndex:
+        if int(reversals[readIndex].split('-')[1].split('.')[0]) != nameIndex + 1:
+            files_for_rename = [f for f in filenames if f.split('-')[1] == reversals[renameIndex].split('-')[1]]
             for file in files_for_rename:
                 renameFile(source_dir + '/' + file,
-                           source_dir + '/' + file.split('-')[0].zfill(2) + f'-{str(i).zfill(3)}.jpg')
+                           source_dir + '/' + file.split('-')[0].zfill(2) + f'-{str(nameIndex + 1).zfill(3)}.jpg')
+            renameIndex -= 1
+        else:
+            readIndex += 1
+        nameIndex += 1
 
 
 def moveAndCopyFiles(source_dir, destination_dir, files_to_copy=None, files_to_move=None):
@@ -121,70 +128,11 @@ def distributionByNumberReversals(output_path, first_shared_list, last_shared_li
         namingInOrder(output_path + '/' + folder)
 
 
-output_path = 'C:/undr/2024/в пeчати/Гелиос 9/печать'
-distributionByNumberReversals(output_path, '02-000.jpg', '03-000.jpg')
-
-
 def package(reversals_folder_path, image_teacher_path,
             lists_jpeg, groups_jpeg, output_path, source_psd_path,
             album_version, album_design=None):
     output_path = os.path.join(output_path, album_version, album_design)
     os.makedirs(output_path, exist_ok=True)
-
-    # source_psd_path = "C:/programms/undr/page.psd"
-    # output_path = "C:/undr/2024/Школа №18 9Г/res"
-
-    # album_design = "dark"  # dark = album_design
-    #
-    # album_version = "med"  # min/prem = album_version
-
-    # try:
-    #
-    #
-    # lists_jpeg_filenames = sorted(getJpegFilenames(lists_jpeg), key=extractNumber)
-
-    # individual_path_list = "C:/programms/undr/lists1/"
-    # jpeg_filenames_individual_list = getJpegFilenames(individual_path_list)
-
-    # group_jpeg_filenames = sorted(getJpegFilenames(groups_jpeg), key=extractNumber)
-
-    # group1_jpeg_filenames = sorted(getJpegFilenames(folder_group1_path), key=extractNumber)
-    #
-    # group2_jpeg_filenames = sorted(getJpegFilenames(folder_group2_path), key=extractNumber)
-    #
-    #
-    # except ValueError as e:
-    #     print("Ошибка:", e)
-
-    # groups_jpeg = [
-    #     {"groups_jpeg": "C:/programms/undr/group",
-    #      "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group"), key=extractNumber),
-    #      "postfix": "000"}
-    #     # {"groups_jpeg": "C:/programms/undr/group1",
-    #     #  "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/group1"), key=extractNumber), "postfix": "001"}
-    # ]
-    #
-    # lists_jpeg = [
-    #     {"lists_folder_path": "C:/programms/undr/lists",
-    #      "lists_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists"), key=extractNumber),
-    #      "postfix": "000"}
-    #     # {"groups_jpeg": "C:/programms/undr/lists1",
-    #     #  "group_jpeg_filenames": sorted(getJpegFilenames("C:/programms/undr/lists1"), key=extractNumber), "postfix": "001"}
-    #
-    # ]
-    # individual_group_folders = os.listdir("C:/programms/undr/group1")
-    # for folder in individual_group_folders:
-    #     path = "C:/programms/undr/group1" + f"/{folder}"
-    #     groups_jpeg.append(
-    #         {"groups_jpeg": path, "group_jpeg_filenames": sorted(getJpegFilenames(path), key=extractNumber),
-    #          "postfix": folder.split(' ')[0].zfill(3)})
-    #
-    # individual_list_jpegs = os.listdir("C:/programms/undr/lists1")
-    # for list_jpeg in individual_list_jpegs:
-    #     path = "C:/programms/undr/lists1"
-    #     lists_jpeg.append(
-    #         {"lists_folder_path": path, "lists_jpeg_filenames": [list_jpeg],
-    #          "postfix": list_jpeg.split(' ')[0].zfill(3)})
 
     with Session(action="open", file_path=source_psd_path, auto_close=False, ps_version="2022") as ps:
         doc = ps.active_document
@@ -218,3 +166,5 @@ def package(reversals_folder_path, image_teacher_path,
                            len(lists_jpeg[0]['lists_jpeg_filenames']) // 2 + 2, postfix=group["postfix"],
                            album_version=album_version,
                            lists_is_even=len(lists_jpeg[0]["lists_jpeg_filenames"]) % 2 == 0)
+
+        # distributionByNumberReversals(output_path, first_file_from_shared_lists, last_file_from_shared_lists)
