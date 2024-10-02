@@ -68,6 +68,13 @@ def get_directory_path_file(dialog, selected_path):
         dialog.pick_files(initial_directory=path_to_layout)
 
 
+def clear_directory_path():
+    global path_to_layout_text
+    global path_to_layout
+    path_to_layout_text = ft.Text()
+    path_to_layout = None
+
+
 # Функция для загрузки настроек из файла
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
@@ -232,6 +239,7 @@ def front_main(page: ft.Page):
                 album_version=dropdown.value,
                 album_design=album_design)
         stop_event.set()
+        clear_directory_path()
         update_progress_bar(1.0, 'Finish')
 
     def check_all_paths_specified(lists_jpeg, groups_jpeg):

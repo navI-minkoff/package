@@ -135,6 +135,8 @@ def package(reversals_folder_path, image_teacher_path,
 
         jpeg_options = ps.JPEGSaveOptions()
         jpeg_options.quality = 12
+        fillLayer(ps, doc, paintLayer, album_design)
+
 
         deleteUnwantedLayers(doc, layersCannotRemoved)
         for layer in doc.layers:
@@ -150,7 +152,6 @@ def package(reversals_folder_path, image_teacher_path,
                      lists_jpeg[0]['lists_jpeg_filenames'], output_path, 2)
 
         deleteUnwantedLayers(doc, layersCannotRemoved)
-        fillLayer(ps, doc, paintLayer, album_design)
         packingLastListsWithGroupPages(ps, doc, jpeg_options,
                                        lists_jpeg, groups_jpeg, output_path,
                                        album_version)
