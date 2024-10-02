@@ -13,3 +13,13 @@ def generatePrefixes(start, prefix_count, postfix='000'):
         formatted_prefix = f"{i:02}-{postfix}"
         prefixes.append(formatted_prefix)
     return prefixes
+
+
+def truncateAfterWordOrLast(input_string: str, word: str = "мак") -> str:
+    parts = input_string.split('\\')
+
+    for i, part in enumerate(parts):
+        if word in part.lower():
+            return '\\'.join(parts[:i + 1])
+
+    return '\\'.join(parts[:-1])

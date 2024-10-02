@@ -2,8 +2,11 @@ import os
 import hashlib
 
 # Пример использования:
-folder1 = 'C:/undr/2024/Школа №18 9Г/печать/7 разворотов'
-folder2 = 'C:/undr/2024/Школа №18 9Г/печать/test'
+folder1 = 'C:\undr\2024\в пeчати\Сургут 12 11В\печать 2\Медиум\Светлый\7 разворотов'
+folder2 = 'C:\undr\2024\в пeчати\Сургут 12 11В\печать\светлый\7 развр'
+
+folder1 = folder1.replace('\\', '/')
+folder2 = folder2.replace('\\', '/')
 
 
 def calculate_file_hash(filepath, chunk_size=1024):
