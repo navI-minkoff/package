@@ -10,6 +10,7 @@ import flet as ft
 
 from main_module.package_module import package
 from utils import update_module
+from utils.admin_root import ensure_admin, restart_with_admin, run_as_admin
 from utils.file_utils import getJpegFilenames, extractNumber
 from utils.photoshop_utils import types_album, designs_album
 from utils.naming_utils import truncateAfterWordOrLast
@@ -25,8 +26,9 @@ def is_admin():
         return False
 
 
-def run_as_admin():
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+
+
+
 
 
 # Путь к файлу настроек
@@ -232,7 +234,7 @@ def front_main(page: ft.Page):
         os.makedirs(full_output_path, exist_ok=True)
 
         start_monitoring(full_output_path, int(total_pages))
-        run_as_admin()
+        # run_as_admin()
         package(reversals_folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
                 lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg,
                 output_path=full_output_path, source_psd_path=settings["file_path"],
@@ -503,4 +505,7 @@ def front_main(page: ft.Page):
     update_module.init(error_container)
 
 
-ft.app(target=front_main)
+if __name__ == "__main__":
+    # ensure_admin()
+    restart_with_admin()
+    ft.app(target=front_main)
