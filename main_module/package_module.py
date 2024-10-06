@@ -17,9 +17,10 @@ from utils.naming_utils import generatePrefixes
 
 def package(reversals_folder_path, image_teacher_path,
             lists_jpeg, groups_jpeg, output_path, source_psd_path,
-            album_version, album_design=None):
+            album_version, album_design=None, auto_close=False):
     try:
-        with Session(action="open", file_path=source_psd_path, auto_close=False) as ps:
+        with Session(action="open", file_path=source_psd_path,
+                     auto_close=True if auto_close == "True" else False) as ps:
             doc = ps.active_document
 
             jpeg_options = ps.JPEGSaveOptions()

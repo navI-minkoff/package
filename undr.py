@@ -26,18 +26,14 @@ def is_admin():
         return False
 
 
-
-
-
-
-
 # Путь к файлу настроек
 SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "utils", "settings.json")
 
 # Структура настроек по умолчанию
 default_settings = {
     "file_path": "",
-    "theme": "Dark"
+    "theme": "Dark",
+    "close_psd": "True"
 }
 
 path_to_layout_text = ft.Text()
@@ -129,6 +125,8 @@ def front_main(page: ft.Page):
         file_picker = ft.FilePicker(on_result=pick_file_result)
         page.overlay.append(file_picker)
         psd_file_path_text = ft.Text(settings["file_path"], width=300)
+        close_psd_file_checkbox = ft.Checkbox(label="Закрывать PSD файл",
+                                              value=True if settings["close_psd"] == "True" else False)
 
         def save_and_close(e):
             settings["theme"] = theme_dropdown.value
@@ -139,6 +137,7 @@ def front_main(page: ft.Page):
                 update_module.show_error_message("Выберите файл формата psd")
                 return
             settings["file_path"] = psd_file_path_text.value
+            settings["close_psd"] = f"{close_psd_file_checkbox.value}"
             save_settings(settings)
             settings_dialog.open = False
             change_theme()
@@ -163,9 +162,11 @@ def front_main(page: ft.Page):
                 ft.Row([
                     ft.Text("PSD файл:"),
                     ft.IconButton(icon=ft.icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
-                    psd_file_path_text
+                    psd_file_path_text,
+
                 ]),
-                theme_dropdown
+                theme_dropdown,
+                close_psd_file_checkbox
             ]),
             actions=[
                 ft.TextButton("Сохранить", on_click=save_and_close)
@@ -239,7 +240,8 @@ def front_main(page: ft.Page):
                 lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg,
                 output_path=full_output_path, source_psd_path=settings["file_path"],
                 album_version=dropdown.value,
-                album_design=album_design)
+                album_design=album_design,
+                auto_close=settings["close_psd"])
         stop_event.set()
         clear_directory_path()
         update_progress_bar(1.0, 'Finish')
@@ -483,7 +485,8 @@ def front_main(page: ft.Page):
 
     def update_progress(value):
         progress_bar.value = value
-        progress_bar_value.value = str(int(value * 100)) + '%'
+        percentage_meaning = int(value * 100) if int(value * 100) <= 100 else 100
+        progress_bar_value.value = str(percentage_meaning) + '%'
         progress_bar.update()
         progress_bar_value.update()
         page.update()
