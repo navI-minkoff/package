@@ -22,7 +22,6 @@ def package(reversals_folder_path, image_teacher_path,
         with Session(action="open", file_path=source_psd_path,
                      auto_close=True if auto_close == "True" else False) as ps:
             doc = ps.active_document
-
             jpeg_options = ps.JPEGSaveOptions()
             jpeg_options.quality = 12
             fillLayer(ps, doc, paintLayer, album_design)
@@ -32,10 +31,10 @@ def package(reversals_folder_path, image_teacher_path,
                 if layer.name == 'Пояснения' or layer.name == 'Разметка':
                     layer.visible = False
 
-            packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
-                             sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
-                             image_teacher_path,
-                             output_path)
+            # packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
+            #                  sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
+            #                  image_teacher_path,
+            #                  output_path)
 
             packingLists(ps, doc, jpeg_options, lists_jpeg[0]['lists_folder_path'],
                          lists_jpeg[0]['lists_jpeg_filenames'], output_path, 2)
@@ -53,7 +52,7 @@ def package(reversals_folder_path, image_teacher_path,
                 deleteUnwantedLayers(doc, layersCannotRemoved)
                 packagingGroup(ps, doc, jpeg_options, group["groups_jpeg"], group["group_jpeg_filenames"],
                                output_path,
-                               len(lists_jpeg[0]['lists_jpeg_filenames']) // 2 + 2, postfix=group["postfix"],
+                               len(lists_jpeg[0]['lists_jpeg_filenames']) // 2 + 3, postfix=group["postfix"],
                                album_version=album_version,
                                lists_is_even=len(lists_jpeg[0]["lists_jpeg_filenames"]) % 2 == 0)
 

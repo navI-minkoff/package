@@ -69,7 +69,10 @@ def placeAndResizeImage(ps, active_document, image_path, resize=False, edge='l')
     doc_width = active_document.width
     image_width = placed_layer.bounds[2] - placed_layer.bounds[0]
     if resize:
-        scale = (doc_width / 2 - image_width) / image_width * 100 + 100
+        if edge == 'c':
+            scale = (doc_width - image_width) / image_width * 100 + 100
+        else:
+            scale = (doc_width / 2 - image_width) / image_width * 100 + 100
         placed_layer.resize(scale, scale)
         image_width = placed_layer.bounds[2] - placed_layer.bounds[0]
     if edge == 'l':
@@ -84,9 +87,9 @@ def placeAndResizeImage(ps, active_document, image_path, resize=False, edge='l')
 def packagingSpreads(ps, active_document, jpeg_options, folder_path, jpeg_filenames, teacher_path, output_path,
                      prefix="01"):
     photo_names = generateStrings(prefix, 1, len(jpeg_filenames))
-    placeAndResizeImage(ps, active_document, image_path=teacher_path, resize=True, edge='r')
+    # placeAndResizeImage(ps, active_document, image_path=teacher_path, resize=True, edge='r')
     for i in range(len(jpeg_filenames)):
-        placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=True)
+        placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=True, edge='c')
         active_document.saveAs(f"{output_path}/{photo_names[i]}.jpg", jpeg_options, asCopy=True)
 
 
@@ -94,8 +97,8 @@ def packingLists(ps, active_document, jpeg_options, folder_path, jpeg_filenames,
     count_Jpeg = len(jpeg_filenames)
     if count_Jpeg % 2:
         count_Jpeg -= 1
-    photo_names = generatePrefixes(prefix, count_Jpeg // 2)
-    indexName = 0
+    photo_names = generatePrefixes(prefix, count_Jpeg // 2 + 1)
+    indexName = 1
     for i in range(0, count_Jpeg - 1, 2):
         placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=True, edge='l')
         placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i + 1]}", resize=True,
