@@ -17,7 +17,7 @@ from utils.naming_utils import generatePrefixes
 
 def package(reversals_folder_path, image_teacher_path,
             lists_jpeg, groups_jpeg, output_path, source_psd_path,
-            album_version, album_design=None, auto_close=False):
+            album_type, album_design=None, auto_close=False):
     try:
         with Session(action="open", file_path=source_psd_path,
                      auto_close=True if auto_close == "True" else False) as ps:
@@ -31,29 +31,33 @@ def package(reversals_folder_path, image_teacher_path,
                 if layer.name == 'Пояснения' or layer.name == 'Разметка':
                     layer.visible = False
 
-            # packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
-            #                  sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
-            #                  image_teacher_path,
-            #                  output_path)
+            packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
+                             sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
+                             image_teacher_path,
+                             output_path, album_type)
 
             packingLists(ps, doc, jpeg_options, lists_jpeg[0]['lists_folder_path'],
-                         lists_jpeg[0]['lists_jpeg_filenames'], output_path, 2)
+                         lists_jpeg[0]['lists_jpeg_filenames'], output_path,
+                         extractNumber(getFileWithDefiniteEnding(sorted(getJpegFilenames(f"{output_path}")),
+                                                                        None, False), '-'), album_type)
 
             deleteUnwantedLayers(doc, layersCannotRemoved)
             packingLastListsWithGroupPages(ps, doc, jpeg_options,
                                            lists_jpeg, groups_jpeg, output_path,
-                                           album_version)
+                                           album_type)
 
-            first_file_from_shared_lists = getFileWithDefiniteEnding(sorted(getJpegFilenames(f"{output_path}")),
+            all_filenames_in_output_path = sorted(getJpegFilenames(f"{output_path}"))
+            first_file_from_shared_lists = getFileWithDefiniteEnding(all_filenames_in_output_path,
                                                                      shared_postfix, True)
-            last_file_from_shared_lists = getFileWithDefiniteEnding(sorted(getJpegFilenames(f"{output_path}")),
+            last_file_from_shared_lists = getFileWithDefiniteEnding(all_filenames_in_output_path,
                                                                     shared_postfix, False)
             for group in groups_jpeg:
                 deleteUnwantedLayers(doc, layersCannotRemoved)
                 packagingGroup(ps, doc, jpeg_options, group["groups_jpeg"], group["group_jpeg_filenames"],
                                output_path,
-                               len(lists_jpeg[0]['lists_jpeg_filenames']) // 2 + 3, postfix=group["postfix"],
-                               album_version=album_version,
+                               extractNumber(getFileWithDefiniteEnding(all_filenames_in_output_path,
+                                                                       None, False), '-'), postfix=group["postfix"],
+                               album_version=album_type,
                                lists_is_even=len(lists_jpeg[0]["lists_jpeg_filenames"]) % 2 == 0)
 
             distributionByNumberReversals(output_path, first_file_from_shared_lists, last_file_from_shared_lists)

@@ -84,21 +84,30 @@ def placeAndResizeImage(ps, active_document, image_path, resize=False, edge='l')
     placed_layer.translate(new_x, 0)
 
 
-def packagingSpreads(ps, active_document, jpeg_options, folder_path, jpeg_filenames, teacher_path, output_path,
+def packagingSpreads(ps, active_document, jpeg_options, folder_path, jpeg_filenames, teacher_path, output_path, album_type,
                      prefix="01"):
     photo_names = generateStrings(prefix, 1, len(jpeg_filenames))
-    # placeAndResizeImage(ps, active_document, image_path=teacher_path, resize=True, edge='r')
-    for i in range(len(jpeg_filenames)):
-        placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=True, edge='c')
-        active_document.saveAs(f"{output_path}/{photo_names[i]}.jpg", jpeg_options, asCopy=True)
 
+    if album_type == types_album[2]:
+        for i in range(len(jpeg_filenames)):
+            placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=True, edge='c')
+            active_document.saveAs(f"{output_path}/{photo_names[i]}.jpg", jpeg_options, asCopy=True)
+        placeAndResizeImage(ps, active_document, image_path="C:/programms/undr/kind.jpg", resize=True, edge='r')
+        placeAndResizeImage(ps, active_document, image_path=teacher_path, resize=True, edge='r')
+        active_document.saveAs(f"{output_path}/02{shared_postfix}", jpeg_options, asCopy=True)
 
-def packingLists(ps, active_document, jpeg_options, folder_path, jpeg_filenames, output_path, prefix):
+    else:
+        placeAndResizeImage(ps, active_document, image_path=teacher_path, resize=True, edge='r')
+        for i in range(len(jpeg_filenames)):
+            placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=True, edge='l')
+            active_document.saveAs(f"{output_path}/{photo_names[i]}.jpg", jpeg_options, asCopy=True)
+
+def packingLists(ps, active_document, jpeg_options, folder_path, jpeg_filenames, output_path, prefix, album_type):
     count_Jpeg = len(jpeg_filenames)
-    if count_Jpeg % 2:
-        count_Jpeg -= 1
-    photo_names = generatePrefixes(prefix, count_Jpeg // 2 + 1)
-    indexName = 1
+    count_Jpeg -= count_Jpeg % 2
+
+    photo_names = generatePrefixes(prefix + (album_type == types_album[2]), count_Jpeg // 2)
+    indexName = 0
     for i in range(0, count_Jpeg - 1, 2):
         placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i]}", resize=True, edge='l')
         placeAndResizeImage(ps, active_document, image_path=f"{folder_path}/{jpeg_filenames[i + 1]}", resize=True,

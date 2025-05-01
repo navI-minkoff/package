@@ -1,0 +1,723 @@
+([('undr.exe',
+   'C:\\programms\\undr\\package\\build\\undr\\undr.exe',
+   'EXECUTABLE'),
+  ('flet\\bin\\flet\\api-ms-win-crt-utility-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-utility-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\screen_retriever_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\screen_retriever_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-file-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-file-l1-2-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-heap-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-heap-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-memory-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-memory-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-profile-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-profile-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\audioplayers_windows_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\audioplayers_windows_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vccorlib140d.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vccorlib140d.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\concrt140.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\concrt140.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-processthreads-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-processthreads-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-eventing-provider-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-eventing-provider-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-namedpipe-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-namedpipe-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vccorlib140.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vccorlib140.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vcruntime140_1d.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vcruntime140_1d.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\screen_brightness_windows_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\screen_brightness_windows_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-conio-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-conio-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-util-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-util-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-timezone-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-timezone-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vcruntime140_1.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vcruntime140_1.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-debug-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-debug-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\ucrtbased.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\ucrtbased.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-stdio-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-stdio-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-convert-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-convert-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\libGLESv2.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\libGLESv2.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\media_kit_native_event_loop.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\media_kit_native_event_loop.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-string-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-string-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vcruntime140.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vcruntime140.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-libraryloader-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-libraryloader-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-processenvironment-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-processenvironment-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\media_kit_libs_windows_video_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\media_kit_libs_windows_video_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\window_manager_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\window_manager_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-interlocked-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-interlocked-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vcruntime140d.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vcruntime140d.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vk_swiftshader.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vk_swiftshader.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\flet.exe',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\flet.exe',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-sysinfo-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-sysinfo-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-private-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-private-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\geolocator_windows_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\geolocator_windows_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-time-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-time-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-locale-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-locale-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-synch-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-synch-l1-2-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-processthreads-l1-1-1.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-processthreads-l1-1-1.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\libc++.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\libc++.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-math-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-math-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\msvcp140_1.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\msvcp140_1.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\rive_common_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\rive_common_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-multibyte-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-multibyte-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\vulkan-1.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\vulkan-1.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\msvcp140_atomic_wait.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\msvcp140_atomic_wait.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-fibers-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-fibers-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-process-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-process-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-file-l2-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-file-l2-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-console-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-console-l1-2-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-localization-l1-2-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-localization-l1-2-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-filesystem-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-filesystem-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\permission_handler_windows_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\permission_handler_windows_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-file-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-file-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\msvcp140_codecvt_ids.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\msvcp140_codecvt_ids.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\libEGL.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\libEGL.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-console-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-console-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-string-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-string-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-synch-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-synch-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\libmpv-2.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\libmpv-2.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-datetime-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-datetime-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\ucrtbase.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\ucrtbase.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-environment-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-environment-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\flutter_windows.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\flutter_windows.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\msvcp140.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\msvcp140.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\media_kit_video_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\media_kit_video_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\d3dcompiler_47.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\d3dcompiler_47.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-runtime-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-runtime-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\zlib.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\zlib.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\window_to_front_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\window_to_front_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-downlevel-kernel32-l2-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-downlevel-kernel32-l2-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\record_windows_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\record_windows_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-crt-heap-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-crt-heap-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\url_launcher_windows_plugin.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\url_launcher_windows_plugin.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\api-ms-win-core-handle-l1-1-0.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\api-ms-win-core-handle-l1-1-0.dll',
+   'BINARY'),
+  ('flet\\bin\\flet\\msvcp140_2.dll',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\msvcp140_2.dll',
+   'BINARY'),
+  ('python311.dll', 'C:\\Program Files\\Python311\\python311.dll', 'BINARY'),
+  ('_decimal.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_decimal.pyd',
+   'EXTENSION'),
+  ('_hashlib.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_hashlib.pyd',
+   'EXTENSION'),
+  ('_lzma.pyd', 'C:\\Program Files\\Python311\\DLLs\\_lzma.pyd', 'EXTENSION'),
+  ('_bz2.pyd', 'C:\\Program Files\\Python311\\DLLs\\_bz2.pyd', 'EXTENSION'),
+  ('unicodedata.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\unicodedata.pyd',
+   'EXTENSION'),
+  ('select.pyd', 'C:\\Program Files\\Python311\\DLLs\\select.pyd', 'EXTENSION'),
+  ('_socket.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_socket.pyd',
+   'EXTENSION'),
+  ('_multiprocessing.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_multiprocessing.pyd',
+   'EXTENSION'),
+  ('pyexpat.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\pyexpat.pyd',
+   'EXTENSION'),
+  ('_ssl.pyd', 'C:\\Program Files\\Python311\\DLLs\\_ssl.pyd', 'EXTENSION'),
+  ('_queue.pyd', 'C:\\Program Files\\Python311\\DLLs\\_queue.pyd', 'EXTENSION'),
+  ('markupsafe\\_speedups.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\markupsafe\\_speedups.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('_overlapped.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_overlapped.pyd',
+   'EXTENSION'),
+  ('_asyncio.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_asyncio.pyd',
+   'EXTENSION'),
+  ('PIL\\_webp.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\PIL\\_webp.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingtk.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\PIL\\_imagingtk.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingcms.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\PIL\\_imagingcms.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingmath.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\PIL\\_imagingmath.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imaging.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\PIL\\_imaging.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('PIL\\_imagingft.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\PIL\\_imagingft.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('_ctypes.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_ctypes.pyd',
+   'EXTENSION'),
+  ('watchfiles\\_rust_notify.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\watchfiles\\_rust_notify.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('_uuid.pyd', 'C:\\Program Files\\Python311\\DLLs\\_uuid.pyd', 'EXTENSION'),
+  ('_elementtree.pyd',
+   'C:\\Program Files\\Python311\\DLLs\\_elementtree.pyd',
+   'EXTENSION'),
+  ('websockets\\speedups.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\websockets\\speedups.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('httptools\\parser\\url_parser.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\httptools\\parser\\url_parser.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('httptools\\parser\\parser.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\httptools\\parser\\parser.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('yaml\\_yaml.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\yaml\\_yaml.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('ujson.cp311-win_amd64.pyd',
+   'C:\\Users\\Сергей\\AppData\\Roaming\\Python\\Python311\\site-packages\\ujson.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('pydantic_core\\_pydantic_core.cp311-win_amd64.pyd',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\pydantic_core\\_pydantic_core.cp311-win_amd64.pyd',
+   'EXTENSION'),
+  ('api-ms-win-crt-conio-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-conio-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-environment-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-environment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-string-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-string-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-stdio-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-stdio-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-convert-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-convert-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-locale-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-locale-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-process-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-process-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-heap-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-runtime-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-runtime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-filesystem-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-filesystem-l1-1-0.dll',
+   'BINARY'),
+  ('VCRUNTIME140.dll',
+   'C:\\Program Files\\Python311\\VCRUNTIME140.dll',
+   'BINARY'),
+  ('api-ms-win-crt-math-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-math-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-time-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-time-l1-1-0.dll',
+   'BINARY'),
+  ('libcrypto-1_1.dll',
+   'C:\\Program Files\\Python311\\DLLs\\libcrypto-1_1.dll',
+   'BINARY'),
+  ('api-ms-win-crt-utility-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-crt-utility-l1-1-0.dll',
+   'BINARY'),
+  ('libssl-1_1.dll',
+   'C:\\Program Files\\Python311\\DLLs\\libssl-1_1.dll',
+   'BINARY'),
+  ('libffi-8.dll',
+   'C:\\Program Files\\Python311\\DLLs\\libffi-8.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-2-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-synch-l1-2-0.dll',
+   'BINARY'),
+  ('VCRUNTIME140_1.dll',
+   'C:\\Program Files\\Python311\\VCRUNTIME140_1.dll',
+   'BINARY'),
+  ('MSVCP140.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\MSVCP140.dll',
+   'BINARY'),
+  ('ucrtbase.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\ucrtbase.dll',
+   'BINARY'),
+  ('api-ms-win-core-libraryloader-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-libraryloader-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-fibers-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-fibers-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-sysinfo-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-sysinfo-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-handle-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-handle-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-errorhandling-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-heap-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-namedpipe-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-namedpipe-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-console-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-console-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l2-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-file-l2-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-debug-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-debug-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-util-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-util-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-profile-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-profile-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-localization-l1-2-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-localization-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-processthreads-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-interlocked-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-interlocked-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-string-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-string-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processenvironment-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-processenvironment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-memory-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-memory-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-2-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-file-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-synch-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-timezone-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-timezone-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-1.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-processthreads-l1-1-1.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-file-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-datetime-l1-1-0.dll',
+   'C:\\Program Files\\Eclipse '
+   'Adoptium\\jdk-21.0.3.9-hotspot\\bin\\api-ms-win-core-datetime-l1-1-0.dll',
+   'BINARY'),
+  ('base_library.zip',
+   'C:\\programms\\undr\\package\\build\\undr\\base_library.zip',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_close.png',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_close.png',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\AssetManifest.bin',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\AssetManifest.bin',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\app.so',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\app.so',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\fonts\\MaterialIcons-Regular.otf',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\fonts\\MaterialIcons-Regular.otf',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_unmaximize.png',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_unmaximize.png',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_minimize.png',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_minimize.png',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\AssetManifest.json',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\AssetManifest.json',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\shaders\\ink_sparkle.frag',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\shaders\\ink_sparkle.frag',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\flutter_map\\lib\\assets\\flutter_map_logo.png',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\flutter_map\\lib\\assets\\flutter_map_logo.png',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\icudtl.dat',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\icudtl.dat',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\NOTICES.Z',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\NOTICES.Z',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_maximize.png',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\window_manager\\images\\ic_chrome_maximize.png',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\FontManifest.json',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\FontManifest.json',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\wakelock_plus\\assets\\no_sleep.js',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\wakelock_plus\\assets\\no_sleep.js',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\record_web\\assets\\js\\record.fixwebmduration.js',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\record_web\\assets\\js\\record.fixwebmduration.js',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\media_kit\\assets\\web\\hls1.4.10.js',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\media_kit\\assets\\web\\hls1.4.10.js',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\cupertino_icons\\assets\\CupertinoIcons.ttf',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\cupertino_icons\\assets\\CupertinoIcons.ttf',
+   'DATA'),
+  ('flet\\bin\\flet\\data\\flutter_assets\\packages\\record_web\\assets\\js\\record.worklet.js',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\flet\\bin\\flet\\data\\flutter_assets\\packages\\record_web\\assets\\js\\record.worklet.js',
+   'DATA'),
+  ('certifi\\py.typed',
+   'C:\\Program Files\\Python311\\Lib\\site-packages\\certifi\\py.typed',
+   'DATA'),
+  ('certifi\\cacert.pem',
+   'C:\\Program Files\\Python311\\Lib\\site-packages\\certifi\\cacert.pem',
+   'DATA'),
+  ('websockets-13.1.dist-info\\INSTALLER',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\websockets-13.1.dist-info\\INSTALLER',
+   'DATA'),
+  ('attrs-24.2.0.dist-info\\INSTALLER',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\attrs-24.2.0.dist-info\\INSTALLER',
+   'DATA'),
+  ('attrs-24.2.0.dist-info\\METADATA',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\attrs-24.2.0.dist-info\\METADATA',
+   'DATA'),
+  ('attrs-24.2.0.dist-info\\licenses\\LICENSE',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\attrs-24.2.0.dist-info\\licenses\\LICENSE',
+   'DATA'),
+  ('attrs-24.2.0.dist-info\\RECORD',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\attrs-24.2.0.dist-info\\RECORD',
+   'DATA'),
+  ('websockets-13.1.dist-info\\RECORD',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\websockets-13.1.dist-info\\RECORD',
+   'DATA'),
+  ('websockets-13.1.dist-info\\LICENSE',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\websockets-13.1.dist-info\\LICENSE',
+   'DATA'),
+  ('websockets-13.1.dist-info\\WHEEL',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\websockets-13.1.dist-info\\WHEEL',
+   'DATA'),
+  ('attrs-24.2.0.dist-info\\WHEEL',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\attrs-24.2.0.dist-info\\WHEEL',
+   'DATA'),
+  ('websockets-13.1.dist-info\\METADATA',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\websockets-13.1.dist-info\\METADATA',
+   'DATA'),
+  ('websockets-13.1.dist-info\\top_level.txt',
+   'C:\\Program '
+   'Files\\Python311\\Lib\\site-packages\\websockets-13.1.dist-info\\top_level.txt',
+   'DATA')],)

@@ -239,7 +239,7 @@ def front_main(page: ft.Page):
         package(reversals_folder_path=selected_path_reversals.value, image_teacher_path=selected_path_teacher.value,
                 lists_jpeg=lists_jpeg, groups_jpeg=groups_jpeg,
                 output_path=full_output_path, source_psd_path=settings["file_path"],
-                album_version=dropdown.value,
+                album_type=dropdown.value,
                 album_design=album_design,
                 auto_close=settings["close_psd"])
         stop_event.set()

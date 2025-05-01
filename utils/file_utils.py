@@ -16,8 +16,9 @@ def getJpegFilenames(folder_path):
         _, ext = os.path.splitext(file)
         if ext.lower() not in ['.jpg', '.jpeg']:
             update_module.show_error_message(f"Файл {file} не является JPEG файлом")
-            raise ValueError(f"Файл {file} не является JPEG файлом")
-        jpeg_files.append(file)
+            # raise ValueError(f"Файл {file} не является JPEG файлом")
+        else:
+            jpeg_files.append(file)
     return jpeg_files
 
 
@@ -32,8 +33,8 @@ def getNameByNumberSpreads(count_spreads):
     return name
 
 
-def extractNumber(filename):
-    return int(filename.split('.')[0])
+def extractNumber(filename, symbol='.'):
+    return int(filename.split(symbol)[0])
 
 
 def renameFile(old_name, new_name):
@@ -85,14 +86,15 @@ def moveAndCopyFiles(source_dir, destination_dir, files_to_copy=None, files_to_m
 
 
 def getFileWithDefiniteEnding(filenames, endswith, initially=True):
-    if initially:
-        return min(
-            [f for f in filenames if f.endswith(f'{endswith}')],
-            key=lambda x: int(x.split('-')[0]))
+    if endswith is None:
+        filtered_files = filenames
     else:
-        return max(
-            [f for f in filenames if f.endswith(f'{endswith}')],
-            key=lambda x: int(x.split('-')[0]))
+        filtered_files = [f for f in filenames if f.endswith(f'{endswith}')]
+
+    if initially:
+        return min(filtered_files, key=lambda x: int(x.split('-')[0]))
+    else:
+        return max(filtered_files, key=lambda x: int(x.split('-')[0]))
 
 
 def distributionByNumberReversals(output_path, first_shared_list, last_shared_list):
