@@ -39,12 +39,13 @@ def package(reversals_folder_path, image_teacher_path,
             packingLists(ps, doc, jpeg_options, lists_jpeg[0]['lists_folder_path'],
                          lists_jpeg[0]['lists_jpeg_filenames'], output_path,
                          extractNumber(getFileWithDefiniteEnding(sorted(getJpegFilenames(f"{output_path}")),
-                                                                        None, False), '-'), album_type)
+                                                                        None, False), '-') + 1, album_type)
 
             deleteUnwantedLayers(doc, layersCannotRemoved)
             packingLastListsWithGroupPages(ps, doc, jpeg_options,
                                            lists_jpeg, groups_jpeg, output_path,
                                            album_type)
+            return
 
             all_filenames_in_output_path = sorted(getJpegFilenames(f"{output_path}"))
             first_file_from_shared_lists = getFileWithDefiniteEnding(all_filenames_in_output_path,
