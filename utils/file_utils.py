@@ -19,7 +19,7 @@ def getJpegFilenames(folder_path):
             # raise ValueError(f"Файл {file} не является JPEG файлом")
         else:
             jpeg_files.append(file)
-    return jpeg_files
+    return sorted(jpeg_files, key=extractNumber)
 
 
 def getNameByNumberSpreads(count_spreads):
@@ -34,7 +34,9 @@ def getNameByNumberSpreads(count_spreads):
 
 
 def extractNumber(filename, symbol='.'):
-    return int(filename.split(symbol)[0])
+    filename = filename.split(symbol)[0]
+    filename = filename.split('-')[0] if '-' in filename else filename
+    return int(filename)
 
 
 def renameFile(old_name, new_name):
@@ -98,7 +100,7 @@ def getFileWithDefiniteEnding(filenames, endswith, initially=True):
 
 
 def distributionByNumberReversals(output_path, first_shared_list, last_shared_list):
-    filenames = sorted(getJpegFilenames(f"{output_path}"))
+    filenames = getJpegFilenames(output_path)
     shared_lists = []
     for i in range(int(first_shared_list.split('-')[0]), int(last_shared_list.split('-')[0]) + 1):
         shared_lists.append(f'{i}'.zfill(2) + shared_postfix)

@@ -120,7 +120,7 @@ def packingLastListsWithGroupPages(ps, active_document, jpeg_options,
                                    lists_jpeg,
                                    groups_jpeg,
                                    output_path, album_version):
-    if not lists_jpeg or not groups_jpeg:
+    if not lists_jpeg:
         return
 
     count_list_pages = len(lists_jpeg[0]["lists_jpeg_filenames"])

@@ -32,13 +32,13 @@ def package(reversals_folder_path, image_teacher_path,
                     layer.visible = False
 
             packagingSpreads(ps, doc, jpeg_options, reversals_folder_path,
-                             sorted(getJpegFilenames(reversals_folder_path), key=extractNumber),
+                             getJpegFilenames(reversals_folder_path),
                              image_teacher_path,
                              output_path, album_type)
 
             packingLists(ps, doc, jpeg_options, lists_jpeg[0]['lists_folder_path'],
                          lists_jpeg[0]['lists_jpeg_filenames'], output_path,
-                         extractNumber(getFileWithDefiniteEnding(sorted(getJpegFilenames(f"{output_path}")),
+                         extractNumber(getFileWithDefiniteEnding(getJpegFilenames(output_path),
                                                                         None, False), '-') + 1, album_type)
 
             deleteUnwantedLayers(doc, layersCannotRemoved)
@@ -47,7 +47,7 @@ def package(reversals_folder_path, image_teacher_path,
                                            album_type)
             return
 
-            all_filenames_in_output_path = sorted(getJpegFilenames(f"{output_path}"))
+            all_filenames_in_output_path = getJpegFilenames(output_path)
             first_file_from_shared_lists = getFileWithDefiniteEnding(all_filenames_in_output_path,
                                                                      shared_postfix, True)
             last_file_from_shared_lists = getFileWithDefiniteEnding(all_filenames_in_output_path,

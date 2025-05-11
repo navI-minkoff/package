@@ -196,7 +196,7 @@ def front_main(page: ft.Page):
 
         lists_jpeg = [
             {"lists_folder_path": selected_path_lists.value,
-             "lists_jpeg_filenames": sorted(getJpegFilenames(selected_path_lists.value), key=extractNumber),
+             "lists_jpeg_filenames": getJpegFilenames(selected_path_lists.value),
              "postfix": "000"}]
 
         if selected_path_individual_lists.value:
@@ -209,7 +209,7 @@ def front_main(page: ft.Page):
 
         groups_jpeg = [
             {"groups_jpeg": selected_path_group.value,
-             "group_jpeg_filenames": sorted(getJpegFilenames(selected_path_group.value), key=extractNumber),
+             "group_jpeg_filenames": getJpegFilenames(selected_path_group.value),
              "postfix": "000"}]
 
         if selected_path_individual_group.value:
@@ -217,7 +217,7 @@ def front_main(page: ft.Page):
             for folder in individual_group_folders:
                 path = selected_path_individual_group.value + f"/{folder}"
                 groups_jpeg.append(
-                    {"groups_jpeg": path, "group_jpeg_filenames": sorted(getJpegFilenames(path), key=extractNumber),
+                    {"groups_jpeg": path, "group_jpeg_filenames": getJpegFilenames(path),
                      "postfix": folder.split(' ')[0].zfill(3)})
 
         all_group_pages = 0
