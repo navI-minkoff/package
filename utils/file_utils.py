@@ -11,6 +11,8 @@ def getJpegFilenames(folder_path):
     except Exception as e:
         update_module.show_error_message(f"Файл {folder_path} указан неверно")
         print(f"Файл {folder_path} указан неверно: {e}")
+        return []
+
     jpeg_files = []
     for file in all_files:
         _, ext = os.path.splitext(file)
@@ -19,7 +21,7 @@ def getJpegFilenames(folder_path):
             # raise ValueError(f"Файл {file} не является JPEG файлом")
         else:
             jpeg_files.append(file)
-    return sorted(jpeg_files, key=extractNumber)
+    return jpeg_files
 
 
 def getNameByNumberSpreads(count_spreads):
@@ -34,9 +36,8 @@ def getNameByNumberSpreads(count_spreads):
 
 
 def extractNumber(filename, symbol='.'):
-    filename = filename.split(symbol)[0]
-    filename = filename.split('-')[0] if '-' in filename else filename
-    return int(filename)
+
+    return int(filename.split(symbol)[0])
 
 
 def renameFile(old_name, new_name):
@@ -100,7 +101,7 @@ def getFileWithDefiniteEnding(filenames, endswith, initially=True):
 
 
 def distributionByNumberReversals(output_path, first_shared_list, last_shared_list):
-    filenames = getJpegFilenames(output_path)
+    filenames = sorted(getJpegFilenames(f"{output_path}"))
     shared_lists = []
     for i in range(int(first_shared_list.split('-')[0]), int(last_shared_list.split('-')[0]) + 1):
         shared_lists.append(f'{i}'.zfill(2) + shared_postfix)
@@ -151,7 +152,7 @@ def namingInOrder(source_dir):
         Переименовывает файлы, чтобы они шли по порядку(01-001, 01-002, ...).
         :param source_dir: Путь к исходной папке
     """
-    filenames = getJpegFilenames(source_dir)
+    filenames = sorted(getJpegFilenames(source_dir), key=extractNumber),
     reversals = [i for i in filenames if i.split('-')[0] == '01']
 
     renameIndex = len(reversals) - 1
