@@ -9,19 +9,33 @@ from utils.file_utils import extractNumber, getJpegFilenames
 
 
 def match_with_dictionary(recognized_text, name_dictionary, max_distance=3):
-    recognized_text = recognized_text.strip()
+    """
+    Сравнивает распознанный текст с именами из словаря, используя расстояние Левенштейна.
+    Сравнение регистронезависимое.
+
+    Args:
+        recognized_text (str): Распознанный текст для сравнения.
+        name_dictionary (iterable): Список или множество имен для сравнения.
+        max_distance (int): Максимально допустимое расстояние Левенштейна (по умолчанию 3).
+
+    Returns:
+        str or None: Лучшее совпадающее имя из словаря или None, если подходящего совпадения нет.
+    """
+    recognized_text = recognized_text.strip().lower()
     best_match = None
     best_distance = None
     multiple_name_options = False
 
     for name in name_dictionary:
-        dist = Levenshtein.distance(recognized_text, name)
+        name_lower = name.lower()
+        dist = Levenshtein.distance(recognized_text, name_lower)
         if best_distance is None or dist < best_distance:
             best_distance = dist
             best_match = name
             multiple_name_options = False
         elif dist == best_distance:
             multiple_name_options = True
+
     if best_distance is not None and \
             not multiple_name_options and \
             best_distance <= max_distance:
@@ -109,17 +123,17 @@ def preprocess_image(img):
 
     return sharpened
 
-def get_leftmost_word(result):
+def get_leftmost_word(words):
     """
-    Находит самое левое слово (или блок) в result от easyocr.readtext.
+    Находит самое левое слово (или блок) в words от easyocr.readtext.
     Возвращает текст этого блока.
     """
     leftmost_text = "Не найдено"
-    if not result:
+    if not words:
         return leftmost_text
 
     min_x = float('inf')
-    for item in result:
+    for item in words:
         bbox = item[0]  # bounding box: список из 4 точек
         text = item[1]
         # x-координата самой левой точки блока (обычно bbox[0][0])
@@ -129,22 +143,41 @@ def get_leftmost_word(result):
             leftmost_text = text
     return leftmost_text
 
-def extract_name_from_face(image_bgr, face_location, reader):
-    top, right, bottom, left = face_location
-    cv2.rectangle(image_bgr, (left, top), (right, bottom), (0, 255, 0), 2)
 
-    # 1. Ищем левую границу текста
-    left_border = find_left_text_border(image_bgr, bottom, left, search_width=200)
-    # 2. Ищем верхнюю границу текста
-    top_border = find_top_text_border(image_bgr, left_border, bottom) + 50
-    # 3. Нижняя и правая границы
-    roi_top = top_border
-    roi_bottom = min(top_border + 130, image_bgr.shape[0])
-    roi_left = left_border
-    roi_right = min(left_border + 1000, image_bgr.shape[1])
+def get_upmost_word(words):
+
+    return
+
+
+def extract_words_from_coordinates(image_bgr, roi_coordinates, reader):
+    """
+    Извлекает текст из заданной области изображения с помощью OCR.
+
+    Args:
+        image_bgr: Изображение в формате BGR (numpy array).
+        roi_coordinates: Кортеж (top, right, bottom, left) с координатами области интереса.
+        reader: Объект для OCR (например, easyocr.Reader).
+
+    Returns:
+        list: Список результатов OCR, где каждый элемент содержит данные о распознанном тексте
+              (например, координаты, текст, уверенность). Пустой список, если ничего не найдено.
+    """
+    # Извлекаем координаты области интереса
+    top, right, bottom, left = roi_coordinates
+
+    # Ограничиваем координаты размерами изображения
+    roi_top = max(top, 0)
+    roi_bottom = min(bottom, image_bgr.shape[0])
+    roi_left = max(left, 0)
+    roi_right = min(right, image_bgr.shape[1])
+
+    # Извлекаем область интереса (ROI)
     roi = image_bgr[roi_top:roi_bottom, roi_left:roi_right]
+
+    # Предобработка изображения для OCR
     roi = preprocess_for_ocr(roi)
 
+    # Для отладки сохраняем ROI
     cv2.imwrite("debug_roi.png", roi)
 
     # OCR для извлечения текста
@@ -152,16 +185,76 @@ def extract_name_from_face(image_bgr, face_location, reader):
         roi,
         detail=1,
         paragraph=False,
-        contrast_ths=0.1,  # Уменьшите порог контраста для лучшего распознавания
-        adjust_contrast=0.5,  # Настройте контраст
-        width_ths=0.5,  # Экспериментируйте с этим значением
-        height_ths=0.5,  # И с этим
+        contrast_ths=0.1,  # Уменьшенный порог контраста
+        adjust_contrast=0.5,  # Настройка контраста
+        width_ths=0.5,  # Настройка ширины текста
+        height_ths=0.5,  # Настройка высоты текста
     )
 
-    name = get_leftmost_word(result)
+    return result
 
-    return name
 
+def extract_surname_from_face(image_bgr, face_location, reader):
+    """
+    Извлекает имя из изображения на основе положения лица.
+
+    Args:
+        image_bgr: Изображение в формате BGR (numpy array).
+        face_location: Кортеж (top, right, bottom, left) с координатами лица.
+        reader: Объект для OCR (например, easyocr.Reader).
+
+    Returns:
+        str: Найденное имя или None, если ничего не найдено.
+    """
+    top, right, bottom, left = face_location
+
+    # 1. Ищем левую границу текста
+    left_border = find_left_text_border(image_bgr, bottom, left, search_width=200)
+    # 2. Ищем верхнюю границу текста
+    top_border = find_top_text_border(image_bgr, left_border, bottom) + 50
+    # 3. Определяем координаты области интереса (ROI)
+    roi_top = top_border
+    roi_bottom = min(top_border + 130, image_bgr.shape[0])
+    roi_left = left_border
+    roi_right = min(left_border + 1000, image_bgr.shape[1])
+
+    # Формируем кортеж координат для функции извлечения слова
+    roi_coordinates = (roi_top, roi_right, roi_bottom, roi_left)
+
+    # Извлекаем имя с помощью функции extract_word_from_coordinates
+    words = extract_words_from_coordinates(image_bgr, roi_coordinates, reader)
+
+    surname = get_leftmost_word(words)
+
+    return surname
+
+
+def extract_surname_from_dark_version_portrait(image_bgr, words_coordinates, reader):
+    """
+    Извлекает имя для разворота из темного варианта альбома.
+
+    Args:
+        image_bgr: Изображение в формате BGR (numpy array).
+        words_coordinates: Кортеж (top, right, bottom, left) с координатами слов.
+        reader: Объект для OCR (например, easyocr.Reader).
+
+    Returns:
+        str: Найденное имя или None, если ничего не найдено.
+    """
+    top, right, bottom, left = words_coordinates
+
+    roi_top = max(top, 0)
+    roi_bottom = min(bottom, image_bgr.shape[0])
+    roi_left = max(left, 0)
+    roi_right = min(right, image_bgr.shape[1])
+
+    roi_coordinates = (roi_top, roi_right, roi_bottom, roi_left)
+
+    words = extract_words_from_coordinates(image_bgr, roi_coordinates, reader)
+
+    surname = get_leftmost_word(words)
+
+    return surname
 
 def get_top_faces(locations, encodings, top_n=2):
     # locations: список кортежей (top, right, bottom, left)
@@ -192,9 +285,40 @@ def preprocess_collages(collage_paths):
         })
     return collages_data
 
-def find_name_for_portrait_from_portrait():
-    return
-def find_name_for_portrait_from_collage(portrait_path, collages_data, all_student_names, tolerance=0.6):
+
+def find_surname_for_portrait_from_dark_album(portrait_path, all_student_names):
+    coords_for_words_from_portrait_dark_album = (6400, 4160, 6620, 1460)
+    image = face_recognition.load_image_file(portrait_path)
+    reader = easyocr.Reader(['ru'])
+    surname = extract_surname_from_dark_version_portrait(image_bgr=image,
+                                                         words_coordinates=coords_for_words_from_portrait_dark_album,
+                                                         reader=reader)
+    surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
+
+    return surname_final
+
+def find_surname_for_portrait_from_light_mini(portrait_path, all_student_names):
+
+    image = face_recognition.load_image_file(portrait_path)
+    reader = easyocr.Reader(['ru'])
+
+
+    surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
+
+    return surname_final
+
+def find_surname_for_portrait_from_light_prem(portrait_path, all_student_names):
+    coords_for_words_from_portrait_dark_album = (6400, 4160, 6620, 1460)
+    image = face_recognition.load_image_file(portrait_path)
+    reader = easyocr.Reader(['ru'])
+    surname = extract_surname_from_dark_version_portrait(image_bgr=image,
+                                                         words_coordinates=coords_for_words_from_portrait_dark_album,
+                                                         reader=reader)
+    surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
+
+    return surname_final
+
+def find_surname_for_portrait_from_collage(portrait_path, collages_data, all_student_names, tolerance=0.6):
     image_portrait, locations_portrait, encodings_portrait = get_face_encodings(portrait_path)
     if not encodings_portrait:
         print(f"Лицо не найдено на {portrait_path}")
@@ -214,11 +338,11 @@ def find_name_for_portrait_from_collage(portrait_path, collages_data, all_studen
         if match_indices:
             best_match_index = min(match_indices, key=lambda i: distances[i])
             image_bgr = cv2.cvtColor(image_collage, cv2.COLOR_RGB2BGR)
-            name_raw = extract_name_from_face(image_bgr, locations_collage[best_match_index], reader)
-            name_final = match_with_dictionary(name_raw.split(' ')[0], all_student_names, max_distance=2)
+            surname = extract_surname_from_face(image_bgr, locations_collage[best_match_index], reader)
+            surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
             print(
-                f"Портрет: {os.path.basename(portrait_path)} | Коллаж: {os.path.basename(collage['path'])} | Имя: {name_final}")
-            return name_final
+                f"Портрет: {os.path.basename(portrait_path)} | Коллаж: {os.path.basename(collage['path'])} | Имя: {surname_final}")
+            return surname_final
     print(f"Портрет: {os.path.basename(portrait_path)} | Имя не найдено на коллажах")
     return None
 
@@ -229,12 +353,12 @@ def get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student
 
     portrait_files = [os.path.join(portrait_files_path, f) for f in portrait_files]
     collage_files = [os.path.join(collage_files_path, f) for f in collage_files]
-    collages_data = preprocess_collages(collage_files)
+    # collages_data = preprocess_collages(collage_files)
 
     name_to_portrait_index = {}
     for idx, portrait_path in enumerate(portrait_files):
-        name_final = find_name_for_portrait_from_collage(portrait_path, collages_data, all_student_names, tolerance=0.4)
-
+        # name_final = find_surname_for_portrait_from_collage(portrait_path, collages_data, all_student_names, tolerance=0.4)
+        name_final = find_surname_for_portrait_from_dark_album(portrait_path, all_student_names)
         if name_final is not None:
             if name_final in name_to_portrait_index:
                 # Конфликт если фамилия уже связано с другим портретом
@@ -254,11 +378,11 @@ all_student_names = [
     "Фокин", "Абаимова", "Войт", "Ахунов",
     "Деревянко", "Болотова", "Жуманазарова", "Дюрич",
     "Плеханов", "Хдрян", "Акрамова", "Нечеухин",
-    "Зияева", "Акылбекова"
+    "Зияева", "Акылбекова", "Шуплецова"
 ]
 
 # Пути к портретам и коллажам
-portrait_files_path = r'C:\programms\undr\package\utils\face_recognition\img\развр'
+portrait_files_path = r'C:\programms\undr\package\utils\face_recognition\img\разворот_темн'
 collage_files_path = r'C:\programms\undr\package\utils\face_recognition\img\сп'
 
 print(get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names))
