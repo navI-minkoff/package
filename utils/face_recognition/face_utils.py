@@ -1,3 +1,4 @@
+import json
 import os
 import glob
 import face_recognition
@@ -6,6 +7,41 @@ import easyocr
 import numpy as np
 import Levenshtein
 from utils.file_utils import extractNumber, getJpegFilenames
+from utils.photoshop_utils import designs_album, types_album
+
+
+def load_album_coordinates():
+    """
+    Загружает координаты альбомов из settings.json.
+
+    Returns:
+        dict: Словарь с координатами или значения по умолчанию, если файл отсутствует/некорректен.
+    """
+    settings_file = os.path.join(os.path.dirname(__file__), r"..\settings.json")
+    default_coordinates = {
+        "Темный": {
+            "Мини": [6400, 4160, 6630, 1460],
+            "Медиум": [6400, 4160, 6630, 1460],
+            "Премиум": [6400, 4160, 6630, 1460]
+        },
+        "Светлый": {
+            "Мини": [6460, 2950, 6680, 450],
+            "Медиум": None,
+            "Премиум": [3350, 4450, 3670, 250]
+        }
+    }
+
+    try:
+        if os.path.exists(settings_file):
+            with open(settings_file, "r", encoding="utf-8") as f:
+                settings = json.load(f)
+                return settings.get("album_coordinates", default_coordinates)
+        else:
+            print(f"Файл {settings_file} не найден. Используются координаты по умолчанию.")
+            return default_coordinates
+    except Exception as e:
+        print(f"Ошибка при загрузке {settings_file}: {e}. Используются координаты по умолчанию.")
+        return default_coordinates
 
 
 def match_with_dictionary(recognized_text, name_dictionary, max_distance=3):
@@ -116,12 +152,13 @@ def preprocess_image(img):
     # Повышение резкости
     kernel = np.array([
         [-1, -1, -1],
-        [-1,  9, -1],
+        [-1, 9, -1],
         [-1, -1, -1]
     ])
     sharpened = cv2.filter2D(resized, -1, kernel)
 
     return sharpened
+
 
 def get_leftmost_word(words):
     """
@@ -145,7 +182,6 @@ def get_leftmost_word(words):
 
 
 def get_upmost_word(words):
-
     return
 
 
@@ -229,9 +265,9 @@ def extract_surname_from_face(image_bgr, face_location, reader):
     return surname
 
 
-def extract_surname_from_dark_version_portrait(image_bgr, words_coordinates, reader):
+def extract_surname_from_portrait(image_bgr, words_coordinates, reader):
     """
-    Извлекает имя для разворота из темного варианта альбома.
+    Извлекает фамилию с соответствующего по виду и типу альбома портрета.
 
     Args:
         image_bgr: Изображение в формате BGR (numpy array).
@@ -239,7 +275,7 @@ def extract_surname_from_dark_version_portrait(image_bgr, words_coordinates, rea
         reader: Объект для OCR (например, easyocr.Reader).
 
     Returns:
-        str: Найденное имя или None, если ничего не найдено.
+        str: Найденная фамилия или None, если ничего не найдено.
     """
     top, right, bottom, left = words_coordinates
 
@@ -255,6 +291,7 @@ def extract_surname_from_dark_version_portrait(image_bgr, words_coordinates, rea
     surname = get_leftmost_word(words)
 
     return surname
+
 
 def get_top_faces(locations, encodings, top_n=2):
     # locations: список кортежей (top, right, bottom, left)
@@ -276,7 +313,7 @@ def preprocess_collages(collage_paths):
     for path in collage_paths:
         image, locations, encodings = get_face_encodings(path)
         locations, encodings = get_top_faces(locations, encodings, top_n=2) if len(locations) > 4 else (
-        locations, encodings)
+            locations, encodings)
         collages_data.append({
             "path": path,
             "image": image,
@@ -287,36 +324,83 @@ def preprocess_collages(collage_paths):
 
 
 def find_surname_for_portrait_from_dark_album(portrait_path, all_student_names):
-    coords_for_words_from_portrait_dark_album = (6400, 4160, 6620, 1460)
+    coords_for_words_from_portrait_dark_album = (6400, 4160, 6650, 1460)
     image = face_recognition.load_image_file(portrait_path)
     reader = easyocr.Reader(['ru'])
-    surname = extract_surname_from_dark_version_portrait(image_bgr=image,
-                                                         words_coordinates=coords_for_words_from_portrait_dark_album,
-                                                         reader=reader)
+    surname = extract_surname_from_portrait(image_bgr=image,
+                                            words_coordinates=coords_for_words_from_portrait_dark_album,
+                                            reader=reader)
     surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
 
     return surname_final
 
-def find_surname_for_portrait_from_light_mini(portrait_path, all_student_names):
+
+def find_surname_for_portrait(portrait_path,
+                              all_student_names,
+                              album_design,
+                              album_version,
+                              collages_data=None,
+                              tolerance=0.6):
+    """
+    Универсальная функция для извлечения фамилии из портрета на основе типа альбома и дизайна.
+
+    Args:
+        portrait_path (str): Путь к изображению портрета.
+        all_student_names (list): Список всех возможных фамилий.
+        album_design (str): Дизайн альбома ('Светлый' или 'Темный').
+        album_version (str): Тип альбома ('Мини', 'Медиум', 'Премиум').
+        collages_data (list, optional): Данные коллажей для светлого медиума.
+        tolerance (float, optional): Порог для распознавания лиц (для коллажей).
+
+    Returns:
+        str or None: Найденная фамилия или None, если не найдено.
+    """
+    # Проверяем, является ли это светлым медиумом
+    if album_design == designs_album[0] and album_version == types_album[1]:
+        if collages_data is None:
+            print(f"Ошибка: collages_data не предоставлены для {album_design}/{album_version}")
+            return None
+        return find_surname_for_portrait_from_collage(
+            portrait_path=portrait_path,
+            collages_data=collages_data,
+            all_student_names=all_student_names,
+            tolerance=tolerance
+        )
+
+    # Загружаем координаты из settings.json
+    album_coordinates = load_album_coordinates()
+    coords = album_coordinates.get(album_design, {}).get(album_version)
+    if coords is None:
+        print(f"Координаты не найдены для {album_design}/{album_version}")
+        return None
 
     image = face_recognition.load_image_file(portrait_path)
     reader = easyocr.Reader(['ru'])
 
+    surname = extract_surname_from_portrait(
+        image_bgr=image,
+        words_coordinates=tuple(coords),  # Преобразуем список в кортеж
+        reader=reader
+    )
+
+    if surname and ' ' in surname:
+        surname = surname.split(' ')[0]
 
     surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
-
     return surname_final
+
 
 def find_surname_for_portrait_from_light_prem(portrait_path, all_student_names):
-    coords_for_words_from_portrait_dark_album = (6400, 4160, 6620, 1460)
+    coords_for_words_from_portrait_dark_album = (6400, 4160, 6630, 1460)
     image = face_recognition.load_image_file(portrait_path)
     reader = easyocr.Reader(['ru'])
-    surname = extract_surname_from_dark_version_portrait(image_bgr=image,
-                                                         words_coordinates=coords_for_words_from_portrait_dark_album,
-                                                         reader=reader)
+    surname = extract_surname_from_portrait(image_bgr=image,
+                                            words_coordinates=coords_for_words_from_portrait_dark_album,
+                                            reader=reader)
     surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
 
     return surname_final
+
 
 def find_surname_for_portrait_from_collage(portrait_path, collages_data, all_student_names, tolerance=0.6):
     image_portrait, locations_portrait, encodings_portrait = get_face_encodings(portrait_path)
@@ -339,6 +423,10 @@ def find_surname_for_portrait_from_collage(portrait_path, collages_data, all_stu
             best_match_index = min(match_indices, key=lambda i: distances[i])
             image_bgr = cv2.cvtColor(image_collage, cv2.COLOR_RGB2BGR)
             surname = extract_surname_from_face(image_bgr, locations_collage[best_match_index], reader)
+
+            if surname and ' ' in surname:
+                surname = surname.split(' ')[0]
+
             surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
             print(
                 f"Портрет: {os.path.basename(portrait_path)} | Коллаж: {os.path.basename(collage['path'])} | Имя: {surname_final}")
@@ -347,21 +435,44 @@ def find_surname_for_portrait_from_collage(portrait_path, collages_data, all_stu
     return None
 
 
-def get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names):
+def get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names, album_version, album_design):
+    """
+    Создает пары (фамилия, индекс портрета) для портретов на основе коллажей и альбома.
+
+    Args:
+        portrait_files_path (str): Путь к папке с портретами.
+        collage_files_path (str): Путь к папке с коллажами.
+        all_student_names (list): Список всех возможных фамилий.
+        album_version (str): Тип альбома ('Мини', 'Медиум', 'Премиум').
+        album_design (str): Дизайн альбома ('Светлый' или 'Темный').
+
+    Returns:
+        list: Список кортежей (фамилия, индекс портрета).
+    """
     portrait_files = sorted(getJpegFilenames(portrait_files_path), key=extractNumber)
     collage_files = sorted(getJpegFilenames(collage_files_path), key=extractNumber)
 
     portrait_files = [os.path.join(portrait_files_path, f) for f in portrait_files]
     collage_files = [os.path.join(collage_files_path, f) for f in collage_files]
-    # collages_data = preprocess_collages(collage_files)
+
+    # Предобработка коллажей только для светлого медиума
+    collages_data = None
+    if album_design == 'Светлый' and album_version == 'Медиум':
+        collages_data = preprocess_collages(collage_files)
 
     name_to_portrait_index = {}
     for idx, portrait_path in enumerate(portrait_files):
-        # name_final = find_surname_for_portrait_from_collage(portrait_path, collages_data, all_student_names, tolerance=0.4)
-        name_final = find_surname_for_portrait_from_dark_album(portrait_path, all_student_names)
+        name_final = find_surname_for_portrait(
+            portrait_path=portrait_path,
+            all_student_names=all_student_names,
+            album_design=album_design,
+            album_version=album_version,
+            collages_data=collages_data,
+            tolerance=0.4
+        )
         if name_final is not None:
             if name_final in name_to_portrait_index:
-                # Конфликт если фамилия уже связано с другим портретом
+                # Конфликт, если фамилия уже связана с другим портретом
                 prev_idx = name_to_portrait_index[name_final]
                 print(f"Конфликт для имени '{name_final}': портреты {prev_idx} и {idx} получают None")
                 name_to_portrait_index[name_final] = None
@@ -369,8 +480,8 @@ def get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student
                 name_to_portrait_index[name_final] = idx
 
     results = [(name, idx) for name, idx in name_to_portrait_index.items() if idx is not None]
-
     return results
+
 
 # Список всех возможных имён
 all_student_names = [
@@ -378,11 +489,16 @@ all_student_names = [
     "Фокин", "Абаимова", "Войт", "Ахунов",
     "Деревянко", "Болотова", "Жуманазарова", "Дюрич",
     "Плеханов", "Хдрян", "Акрамова", "Нечеухин",
-    "Зияева", "Акылбекова", "Шуплецова"
+    "Зияева", "Акылбекова",
+    "Шуплецова",  #темный
+    "Павлушина",  #светлый прем
+    "Пучкин"      #светлый мини
 ]
 
 # Пути к портретам и коллажам
-portrait_files_path = r'C:\programms\undr\package\utils\face_recognition\img\разворот_темн'
+portrait_files_path = r'C:\programms\undr\package\utils\face_recognition\img\развр'
 collage_files_path = r'C:\programms\undr\package\utils\face_recognition\img\сп'
 
-print(get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names))
+print(get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names,
+                              album_version=types_album[1],
+                              album_design=designs_album[0]))
