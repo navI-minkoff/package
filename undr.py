@@ -161,7 +161,7 @@ def front_main(page: ft.Page):
             content=ft.Column([
                 ft.Row([
                     ft.Text("PSD файл:"),
-                    ft.IconButton(icon=ft.icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
+                    ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
                     psd_file_path_text,
 
                 ]),
@@ -339,7 +339,7 @@ def front_main(page: ft.Page):
     elevated_button_individual_list = ft.ElevatedButton(
         "Индивидуальные списки",
         height=buttons_height,
-        icon=ft.icons.FOLDER_OPEN,
+        icon=ft.Icons.FOLDER_OPEN,
         on_click=lambda _: get_directory_path_folder(pick_path_individual_lists_dialog, selected_path_individual_lists))
     switch1 = ft.Switch(
         label="Индивидуальные списки",
@@ -351,7 +351,7 @@ def front_main(page: ft.Page):
     elevated_button_individual_group = ft.ElevatedButton(
         "Индивидуальные групповые",
         height=buttons_height,
-        icon=ft.icons.FOLDER_OPEN,
+        icon=ft.Icons.FOLDER_OPEN,
         on_click=lambda _: get_directory_path_folder(pick_path_individual_group_dialog, selected_path_individual_group)
     )
     switch2 = ft.Switch(
@@ -372,7 +372,7 @@ def front_main(page: ft.Page):
             ft.dropdown.Option(types_album[1]),
             ft.dropdown.Option(types_album[2])
         ],
-        height=buttons_height * 1.2,
+        # height=buttons_height * 1.2,
         width=200,
         label="Вид альбома"
     )
@@ -388,7 +388,7 @@ def front_main(page: ft.Page):
             ft.ElevatedButton(
                 "Списки",
                 height=buttons_height,
-                icon=ft.icons.FOLDER_OPEN,
+                icon=ft.Icons.FOLDER_OPEN,
                 on_click=lambda _: get_directory_path_folder(pick_path_lists_dialog, selected_path_lists)
             ),
             selected_path_lists
@@ -400,17 +400,17 @@ def front_main(page: ft.Page):
             ft.ElevatedButton(
                 "Групповые",
                 height=buttons_height,
-                icon=ft.icons.FOLDER_OPEN,
+                icon=ft.Icons.FOLDER_OPEN,
                 on_click=lambda _: get_directory_path_folder(pick_path_group_dialog, selected_path_group)
             ),
             selected_path_group
         ],
     )
-    progress_bar = ft.ProgressBar(value=0.0, color=ft.colors.WHITE, height=5, width=600)
+    progress_bar = ft.ProgressBar(value=0.0, color=ft.Colors.WHITE, height=5, width=600)
     page.add(
         ft.Row([ft.Text(''),
                 ft.IconButton(
-                    icon=ft.icons.SETTINGS,
+                    icon=ft.Icons.SETTINGS,
                     icon_size=30,
                     on_click=open_settings_dialog,
                     alignment=ft.alignment.center_right
@@ -422,7 +422,7 @@ def front_main(page: ft.Page):
                 ft.ElevatedButton(
                     "Развороты",
                     height=buttons_height,
-                    icon=ft.icons.FOLDER_OPEN,
+                    icon=ft.Icons.FOLDER_OPEN,
                     on_click=lambda _: get_directory_path_folder(pick_path_reversals_dialog, selected_path_reversals),
                 ),
                 selected_path_reversals]
@@ -433,7 +433,7 @@ def front_main(page: ft.Page):
                 ft.ElevatedButton(
                     "Учителя",
                     height=buttons_height,
-                    icon=ft.icons.FOLDER_OPEN,
+                    icon=ft.Icons.FOLDER_OPEN,
                     on_click=lambda _: get_directory_path_file(pick_path_teacher_dialog, selected_path_teacher)
                 ),
                 selected_path_teacher,
@@ -446,7 +446,7 @@ def front_main(page: ft.Page):
             [ft.ElevatedButton(
                 "Результат",
                 height=buttons_height,
-                icon=ft.icons.FOLDER_OPEN,
+                icon=ft.Icons.FOLDER_OPEN,
                 on_click=lambda _: get_directory_path_folder(pick_path_output_dialog, selected_path_output)
             ),
                 selected_path_output]),
@@ -455,7 +455,7 @@ def front_main(page: ft.Page):
                 ft.ElevatedButton(
                     "Упаковка",
                     height=buttons_height,
-                    icon=ft.icons.PRINT,
+                    icon=ft.Icons.PRINT,
                     on_click=lambda _: _package()
                 ),
             ],
