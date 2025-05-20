@@ -184,7 +184,7 @@ all_student_names = [
 # Пути к портретам и коллажам
 portrait_files_path = r'C:\programms\undr\package\utils\adding_cover\img\развр_мед'
 collage_files_path = r'C:\programms\undr\package\utils\adding_cover\img\сп_мед'
-
-print(get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names,
-                              album_version=types_album[1],
-                              album_design=designs_album[0]))
+#
+# print(get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names,
+#                               album_version=types_album[1],
+#                               album_design=designs_album[0]))
