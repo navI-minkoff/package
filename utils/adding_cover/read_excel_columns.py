@@ -53,15 +53,3 @@ def get_surnames_and_covers_from_table(file_path, header_row, col1_name, col2_na
             print(f"{key}: {value}")
 
     return data
-
-
-if __name__ == "__main__":
-    file_path = r"C:\programms\undr\класс.xlsx"
-
-    header_row = 1
-
-    col1_name = "Фамилия Имя"
-    col2_name = "Номер обложки"
-
-    get_surnames_and_covers_from_table(file_path, header_row,
-                                       col1_name, col2_name)

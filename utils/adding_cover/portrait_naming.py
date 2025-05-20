@@ -8,6 +8,7 @@ from utils.config_utils import load_album_coordinates
 from utils.file_utils import getJpegFilenames, extractNumber
 from utils.photoshop_utils import designs_album, types_album
 
+
 def find_surname_for_portrait(portrait_path,
                               all_student_names,
                               album_design,
@@ -28,7 +29,6 @@ def find_surname_for_portrait(portrait_path,
     Returns:
         str or None: Найденная фамилия или None, если не найдено.
     """
-    # Проверяем, является ли это светлым медиумом
     if album_design == designs_album[0] and album_version == types_album[1]:
         if collages_data is None:
             print(f"Ошибка: collages_data не предоставлены для {album_design}/{album_version}")
@@ -40,7 +40,6 @@ def find_surname_for_portrait(portrait_path,
             tolerance=tolerance
         )
 
-    # Загружаем координаты из settings.json
     album_coordinates = load_album_coordinates()
     coords = album_coordinates.get(album_design, {}).get(album_version)
     if coords is None:
@@ -62,29 +61,11 @@ def find_surname_for_portrait(portrait_path,
     surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
     return surname_final
 
-def find_surname_for_portrait_from_dark_album(portrait_path, all_student_names):
-    coords_for_words_from_portrait_dark_album = (6400, 4160, 6650, 1460)
-    image = face_recognition.load_image_file(portrait_path)
-    reader = easyocr.Reader(['ru'])
-    surname = extract_surname_from_portrait(image_bgr=image,
-                                            words_coordinates=coords_for_words_from_portrait_dark_album,
-                                            reader=reader)
-    surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
 
-    return surname_final
-
-def find_surname_for_portrait_from_light_prem(portrait_path, all_student_names):
-    coords_for_words_from_portrait_dark_album = (6400, 4160, 6630, 1460)
-    image = face_recognition.load_image_file(portrait_path)
-    reader = easyocr.Reader(['ru'])
-    surname = extract_surname_from_portrait(image_bgr=image,
-                                            words_coordinates=coords_for_words_from_portrait_dark_album,
-                                            reader=reader)
-    surname_final = match_with_dictionary(surname, all_student_names, max_distance=2)
-
-    return surname_final
-
-def find_surname_for_portrait_from_collage(portrait_path, collages_data, all_student_names, tolerance=0.6):
+def find_surname_for_portrait_from_collage(portrait_path,
+                                           collages_data,
+                                           all_student_names,
+                                           tolerance=0.6):
     image_portrait, locations_portrait, encodings_portrait = get_face_encodings(portrait_path)
     if not encodings_portrait:
         print(f"Лицо не найдено на {portrait_path}")
@@ -115,6 +96,7 @@ def find_surname_for_portrait_from_collage(portrait_path, collages_data, all_stu
             return surname_final
     print(f"Портрет: {os.path.basename(portrait_path)} | Имя не найдено на коллажах")
     return None
+
 
 def get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names, album_version, album_design):
     """
@@ -162,6 +144,7 @@ def get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student
 
     results = [(name, idx) for name, idx in name_to_portrait_index.items() if idx is not None]
     return results
+
 
 # Список всех возможных имён
 all_student_names = [

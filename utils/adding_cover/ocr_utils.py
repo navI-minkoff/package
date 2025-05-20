@@ -4,6 +4,7 @@ import numpy as np
 import Levenshtein
 from image_processing import preprocess_for_ocr, find_left_text_border, find_top_text_border
 
+
 def match_with_dictionary(recognized_text, name_dictionary, max_distance=3):
     """
     Сравнивает распознанный текст с именами из словаря, используя расстояние Левенштейна.
@@ -39,6 +40,7 @@ def match_with_dictionary(recognized_text, name_dictionary, max_distance=3):
     else:
         return None
 
+
 def get_leftmost_word(words):
     """
     Находит самое левое слово (или блок) в words от easyocr.readtext.
@@ -50,17 +52,18 @@ def get_leftmost_word(words):
 
     min_x = float('inf')
     for item in words:
-        bbox = item[0]  # bounding box: список из 4 точек
+        bbox = item[0]
         text = item[1]
-        # x-координата самой левой точки блока (обычно bbox[0][0])
         x = min(point[0] for point in bbox)
         if x < min_x:
             min_x = x
             leftmost_text = text
     return leftmost_text
 
+
 def get_upmost_word(words):
     return
+
 
 def extract_words_from_coordinates(image_bgr, roi_coordinates, reader):
     """
@@ -75,7 +78,6 @@ def extract_words_from_coordinates(image_bgr, roi_coordinates, reader):
         list: Список результатов OCR, где каждый элемент содержит данные о распознанном тексте
               (например, координаты, текст, уверенность). Пустой список, если ничего не найдено.
     """
-    # Извлекаем координаты области интереса
     top, right, bottom, left = roi_coordinates
 
     # Ограничиваем координаты размерами изображения
@@ -84,13 +86,11 @@ def extract_words_from_coordinates(image_bgr, roi_coordinates, reader):
     roi_left = max(left, 0)
     roi_right = min(right, image_bgr.shape[1])
 
-    # Извлекаем область интереса (ROI)
     roi = image_bgr[roi_top:roi_bottom, roi_left:roi_right]
 
-    # Предобработка изображения для OCR
     roi = preprocess_for_ocr(roi)
 
-    # Для отладки сохраняем ROI
+    # Сохраняем для отладки сохраняем
     cv2.imwrite("debug_roi.png", roi)
 
     # OCR для извлечения текста
@@ -98,13 +98,14 @@ def extract_words_from_coordinates(image_bgr, roi_coordinates, reader):
         roi,
         detail=1,
         paragraph=False,
-        contrast_ths=0.1,  # Уменьшенный порог контраста
-        adjust_contrast=0.5,  # Настройка контраста
-        width_ths=0.5,  # Настройка ширины текста
-        height_ths=0.5,  # Настройка высоты текста
+        contrast_ths=0.1,
+        adjust_contrast=0.5,
+        width_ths=0.5,
+        height_ths=0.5,
     )
 
     return result
+
 
 def extract_surname_from_face(image_bgr, face_location, reader):
     """
@@ -120,25 +121,20 @@ def extract_surname_from_face(image_bgr, face_location, reader):
     """
     top, right, bottom, left = face_location
 
-    # 1. Ищем левую границу текста
     left_border = find_left_text_border(image_bgr, bottom, left, search_width=200)
-    # 2. Ищем верхнюю границу текста
     top_border = find_top_text_border(image_bgr, left_border, bottom) + 50
-    # 3. Определяем координаты области интереса (ROI)
+
     roi_top = top_border
     roi_bottom = min(top_border + 130, image_bgr.shape[0])
     roi_left = left_border
     roi_right = min(left_border + 1000, image_bgr.shape[1])
 
-    # Формируем кортеж координат для функции извлечения слова
     roi_coordinates = (roi_top, roi_right, roi_bottom, roi_left)
-
-    # Извлекаем имя с помощью функции extract_word_from_coordinates
     words = extract_words_from_coordinates(image_bgr, roi_coordinates, reader)
-
     surname = get_leftmost_word(words)
 
     return surname
+
 
 def extract_surname_from_portrait(image_bgr, words_coordinates, reader):
     """

@@ -22,23 +22,17 @@ def map_surnames_to_covers(excel_file_path, portrait_files_path, collage_files_p
     Returns:
         dict: Словарь, где ключи - фамилии, значения - кортежи (индекс портрета, номер обложки).
     """
-    # Получаем данные из таблицы (фамилии и номера обложек)
     data = get_surnames_and_covers_from_table(excel_file_path, header_row, col1_name, col2_name)
 
-    # Извлекаем только фамилии
     all_student_names = list(data.keys())
 
-    # Получаем пары (фамилия, индекс портрета) с помощью get_portrait_name_pairs
     portrait_name_pairs = get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names,
                                                   types_album[1], designs_album[0])
 
-    # Создаем результирующий словарь для сопоставления фамилий, индексов и обложек
     result = {}
 
-    # Для каждой пары (фамилия, индекс) из get_portrait_name_pairs
     for surname, portrait_index in portrait_name_pairs:
         if surname in data:
-            # Сопоставляем фамилию с индексом портрета и номером обложки из таблицы
             cover_number = data[surname]
             result[surname] = (portrait_index, cover_number)
         else:
@@ -59,26 +53,20 @@ def copy_and_rename_covers(surname_to_index_cover, covers_folder_path, output_pa
     Returns:
         None
     """
-    # Создаем итоговую папку, если она не существует
     os.makedirs(output_path, exist_ok=True)
 
-    # Получаем список файлов обложек
     cover_files = [f for f in os.listdir(covers_folder_path) if f.lower().endswith(('.jpg', '.jpeg'))]
 
     for surname, (portrait_index, cover_number) in surname_to_index_cover.items():
-        # Формируем имя выходного файла в формате 00-XXX.jpg
         output_filename = f"00-{str(portrait_index + 1).zfill(3)}.jpg"
 
-        # Формируем имя исходного файла обложки (предполагается, что имя файла совпадает с номером обложки)
-        source_filename = f"{cover_number}.jpg"  # Предполагаем, что файлы названы по номеру обложки
+        source_filename = f"{cover_number}.jpg"
 
-        # Проверяем, существует ли файл обложки
         if source_filename in cover_files:
             source_file_path = os.path.join(covers_folder_path, source_filename)
             destination_file_path = os.path.join(output_path, output_filename)
 
             try:
-                # Копируем файл в итоговую папку
                 shutil.copy2(source_file_path, destination_file_path)
                 print(f"Скопирована обложка для {surname}: {source_filename} -> {output_filename}")
             except FileNotFoundError:
@@ -106,12 +94,9 @@ def adding_covers_based_on_portrait():
     surname_to_index_cover = map_surnames_to_covers(file_path, portrait_files_path, collage_files_path,
                                                     header_row, col1_name, col2_name)
 
-
-    # Вызов функции
     copy_and_rename_covers(surname_to_index_cover, covers_folder_path, output_path)
 
 
-# Пример использования
 if __name__ == "__main__":
     adding_covers_based_on_portrait()
 
