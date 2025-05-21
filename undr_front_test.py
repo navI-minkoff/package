@@ -262,19 +262,19 @@ def front_main(page: ft.Page):
         surname_column_text = ft.TextField(
             label="Название колонки\nс фамилией",
             value=settings["surname_column"] if "surname_column" in settings else "",
-            width=200,
+            width=150,
             border_radius=10
         )
         cover_column_text = ft.TextField(
             label="Название колонки\nс обложкой",
             value=settings["cover_column"] if "cover_column" in settings else "",
-            width=200,
+            width=170,
             border_radius=10
         )
         header_row_text = ft.TextField(
             label="Номер строки\nс заголовками",
             value=str(settings["header_row"]) if "header_row" in settings else "",
-            width=200,
+            width=130,
             border_radius=10,
             keyboard_type=ft.KeyboardType.NUMBER
         )
@@ -348,7 +348,7 @@ def front_main(page: ft.Page):
                         cover_column_text,
                         ft.Container(width=10),  # Отступ между полями
                         header_row_text
-                    ], alignment=ft.MainAxisAlignment.CENTER),
+                    ], alignment=ft.MainAxisAlignment.START),
                     ft.Divider(height=20, thickness=1),
 
                     # Секция Обложки
@@ -358,9 +358,9 @@ def front_main(page: ft.Page):
                         ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: directory_picker.get_directory_path()),
                         covers_path_text,
                     ]),
-                ], spacing=10),
-                width=700,
-                height=500
+                ], spacing=10),  # Включаем прокрутку
+                width=550,  # Увеличиваем ширину
+                height=500  # Увеличиваем высоту
             ),
             actions=[
                 ft.ElevatedButton("Сохранить", on_click=save_and_close, bgcolor=Colors.BLUE_700, color=Colors.WHITE)
@@ -440,11 +440,6 @@ def front_main(page: ft.Page):
             album_version=dropdown.value,
             album_design=album_design,
             auto_close=settings["close_psd"],
-            covers_path=settings["covers_path"],
-            excel_path=settings["excel_path"],
-            surname_column=settings["surname_column"],
-            cover_column=settings["cover_column"],
-            header_row=settings["header_row"]
         )
         stop_event.set()
         clear_directory_path()
@@ -614,7 +609,7 @@ def front_main(page: ft.Page):
         ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
         ft.Row([
             ft.ElevatedButton(
-                "Развороты",
+                "Портреты",
                 height=buttons_height,
                 icon=ft.Icons.FOLDER_OPEN,
                 on_click=lambda _: get_directory_path_folder(pick_path_reversals_dialog, selected_path_reversals),
@@ -693,11 +688,13 @@ def is_already_running():
         lock_socket.close()
 
 
+# Главная функция приложения
 def main(page: ft.Page):
+    # Устанавливаем минимальные и начальные размеры окна сразу
     page.window_min_width = 800  # Минимальная ширина окна
-    page.window_min_height = 900  # Минимальная высота окна
+    page.window_min_height = 600  # Минимальная высота окна
     page.window_width = 800      # Начальная ширина окна
-    page.window_height = 1000     # Начальная высота окна
+    page.window_height = 600     # Начальная высота окна
 
     def show_main_interface():
         logging.info("Запуск основного интерфейса")
