@@ -1,10 +1,12 @@
 import face_recognition
 
+
 def get_face_encodings(image_path):
     image = face_recognition.load_image_file(image_path)
     face_locations = face_recognition.face_locations(image)
     encodings = face_recognition.face_encodings(image, face_locations)
     return image, face_locations, encodings
+
 
 def get_top_faces(locations, encodings, top_n=2):
     # locations: список кортежей (top, right, bottom, left)
@@ -19,6 +21,7 @@ def get_top_faces(locations, encodings, top_n=2):
     encodings = [encodings[i] for i in selected_indices]
 
     return locations, encodings
+
 
 def preprocess_collages(collage_paths):
     collages_data = []

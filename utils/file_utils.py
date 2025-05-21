@@ -108,7 +108,7 @@ def distributionByNumberReversals(output_path, first_shared_list, last_shared_li
         if file not in individual_postfix and file != last_shared_list.split('-')[1]:
             individual_postfix.add(filenames[i].split('-')[1])
 
-    shared_titles = [i for i in filenames if i.split('-')[0] == '01' and i.split('-')[1] not in individual_postfix]
+    shared_titles = [i for i in filenames if (i.split('-')[0] == '01' or i.split('-')[0] == '00') and i.split('-')[1] not in individual_postfix]
 
     for i in individual_postfix:
         files_for_move = [f for f in filenames if f.split('-')[1] == i]

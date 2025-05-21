@@ -11,27 +11,18 @@ from flet import Theme, Colors
 
 from main_module.package_module import package
 from utils import update_module
+from utils.adding_cover.add_covers import adding_covers_based_on_portrait
 from utils.admin_root import ensure_admin, restart_with_admin, run_as_admin
 from utils.file_utils import getJpegFilenames, extractNumber
 from utils.photoshop_utils import types_album, designs_album
 from utils.naming_utils import truncateAfterWordOrLast
+from utils.settings_utils import load_settings, save_settings
 
 # Настройка логирования
 logging.basicConfig(filename="app.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 buttons_height = 40
-SETTINGS_FILE = os.path.join(os.path.dirname(__file__), "utils", "settings.json")
-default_settings = {
-    "file_path": "",
-    "theme": "Dark",
-    "close_psd": "True",
-    "token": "",
-    "covers_path": "",
-    "excel_path": "",
-    "surname_column": "",
-    "cover_column": "",
-    "header_row": 1
-}
+
 
 path_to_layout_text = ft.Text()
 path_to_layout = None
@@ -75,25 +66,25 @@ def clear_directory_path():
     path_to_layout = None
 
 
-def load_settings():
-    if os.path.exists(SETTINGS_FILE):
-        with open(SETTINGS_FILE, "r") as f:
-            loaded_settings = json.load(f)
-            # Добавляем недостающие ключи с значениями по умолчанию
-            for key, value in default_settings.items():
-                if key not in loaded_settings:
-                    loaded_settings[key] = value
-            return loaded_settings
-    else:
-        with open(SETTINGS_FILE, "w") as f:
-            json.dump(default_settings, f, indent=4)
-        return default_settings
-
-
-def save_settings(settings):
-    if os.path.exists(SETTINGS_FILE):
-        with open(SETTINGS_FILE, "w") as f:
-            json.dump(settings, f, indent=4)
+# def load_settings():
+#     if os.path.exists(SETTINGS_FILE):
+#         with open(SETTINGS_FILE, "r") as f:
+#             loaded_settings = json.load(f)
+#             # Добавляем недостающие ключи с значениями по умолчанию
+#             for key, value in default_settings.items():
+#                 if key not in loaded_settings:
+#                     loaded_settings[key] = value
+#             return loaded_settings
+#     else:
+#         with open(SETTINGS_FILE, "w") as f:
+#             json.dump(default_settings, f, indent=4)
+#         return default_settings
+#
+#
+# def save_settings(settings):
+#     if os.path.exists(SETTINGS_FILE):
+#         with open(SETTINGS_FILE, "w") as f:
+#             json.dump(settings, f, indent=4)
 
 
 settings = load_settings()
@@ -105,7 +96,6 @@ stop_package_event = threading.Event()
 def check_token(token: str) -> tuple[bool, str]:
     if not token:
         return False, "Токен не введен"
-    # Замените на реальный запрос к серверу
     if token == "test123":
         logging.info("Успешная авторизация")
         return True, None
@@ -233,7 +223,7 @@ def front_main(page: ft.Page):
                 elif excel_path_text.value == "Не выбрано!":
                     excel_path_text.value = e.files[0].path
                 else:
-                    pass  # Дополнительная обработка не требуется
+                    pass
             else:
                 if psd_file_path_text.value == "Не выбрано!":
                     psd_file_path_text.value = "Не выбрано!"
@@ -342,11 +332,12 @@ def front_main(page: ft.Page):
                         ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
                         excel_path_text,
                     ]),
+                    ft.Container(height=5),
                     ft.Row([
                         surname_column_text,
-                        ft.Container(width=10),  # Отступ между полями
+                        ft.Container(width=10),
                         cover_column_text,
-                        ft.Container(width=10),  # Отступ между полями
+                        ft.Container(width=10),
                         header_row_text
                     ], alignment=ft.MainAxisAlignment.START),
                     ft.Divider(height=20, thickness=1),
@@ -420,7 +411,7 @@ def front_main(page: ft.Page):
         for group in groups_jpeg:
             all_group_pages += len(group['group_jpeg_filenames']) / 2
 
-        total_pages = len(os.listdir(selected_path_reversals.value)) + \
+        total_pages = 2 * len(os.listdir(selected_path_reversals.value)) - 1 + \
                       len(lists_jpeg[0]['lists_jpeg_filenames']) / 2 + \
                       len(lists_jpeg) - 1 + \
                       all_group_pages
@@ -430,6 +421,9 @@ def front_main(page: ft.Page):
         os.makedirs(full_output_path, exist_ok=True)
 
         start_monitoring(full_output_path, int(total_pages))
+        start_adding_covers_based_on_portrait(selected_path_reversals.value, lists_jpeg[0]['lists_folder_path'],
+                                              full_output_path,
+                                              dropdown.value, album_design)
         package(
             reversals_folder_path=selected_path_reversals.value,
             image_teacher_path=selected_path_teacher.value,
@@ -671,6 +665,10 @@ def front_main(page: ft.Page):
         stop_event.clear()
         monitor_thread = threading.Thread(target=monitor_folder, args=(folder_path, total_files, stop_event))
         monitor_thread.start()
+
+    def start_adding_covers_based_on_portrait(portrait_files_path, collage_files_path, output_path,
+                                              type_album, design_album):
+        adding_covers_based_on_portrait(portrait_files_path, collage_files_path, output_path, type_album, design_album)
 
     stop_event = threading.Event()
     update_module.init(error_container)

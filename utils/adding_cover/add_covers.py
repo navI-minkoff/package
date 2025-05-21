@@ -1,13 +1,16 @@
 import os
 import shutil
 
+from utils.settings_utils import load_settings
 from utils.adding_cover.portrait_naming import get_portrait_name_pairs
 from utils.adding_cover.read_excel_columns import read_excel_columns_to_map
 from utils.adding_cover.read_excel_columns import get_surnames_and_covers_from_table
 from utils.photoshop_utils import types_album, designs_album
 
 
-def map_surnames_to_covers(excel_file_path, portrait_files_path, collage_files_path, header_row, col1_name, col2_name):
+def map_surnames_to_covers(excel_file_path, portrait_files_path, collage_files_path,
+                           header_row, col1_name, col2_name,
+                           type_album, design_album):
     """
     Сопоставляет фамилии из таблицы с индексами портретов и номерами обложек.
 
@@ -27,7 +30,7 @@ def map_surnames_to_covers(excel_file_path, portrait_files_path, collage_files_p
     all_student_names = list(data.keys())
 
     portrait_name_pairs = get_portrait_name_pairs(portrait_files_path, collage_files_path, all_student_names,
-                                                  types_album[1], designs_album[0])
+                                                  type_album, design_album)
 
     result = {}
 
@@ -77,22 +80,25 @@ def copy_and_rename_covers(surname_to_index_cover, covers_folder_path, output_pa
             print(f"Обложка {source_filename} для {surname} не найдена в {covers_folder_path}")
 
 
-def adding_covers_based_on_portrait():
+def adding_covers_based_on_portrait(portrait_files_path, collage_files_path, output_path,
+                                    type_album, design_album):
+    settings = load_settings()
     # excel
-    file_path = r"C:\programms\undr\класс.xlsx"
-    header_row = 1
-    col1_name = "Фамилия Имя"
-    col2_name = "Номер обложки"
+    file_path = settings.get("excel_path")  # Путь к Excel
+    header_row = settings.get("header_row")  # Номер строки с заголовками
+    col1_name = settings.get("surname_column")  # Название колонки с фамилией
+    col2_name = settings.get("cover_column")  # Название колонки с номером обложки
+    covers_folder_path = settings.get("covers_path")
 
     # Пути к папкам
-    covers_folder_path = r"C:\undr\!ПРОГИ\Обложки"
-    output_path = r"C:\programms\undr\package\utils\adding_cover\img\обложки"
+    # output_path = r"C:\programms\undr\package\utils\adding_cover\img\обложки"
 
     # Пути к портретам и коллажам
-    portrait_files_path = r'C:\programms\undr\package\utils\adding_cover\img\развр_мед'
-    collage_files_path = r'C:\programms\undr\package\utils\adding_cover\img\сп_мед'
+    # portrait_files_path = r'C:\programms\undr\package\utils\adding_cover\img\развр_мед'
+    # collage_files_path = r'C:\programms\undr\package\utils\adding_cover\img\сп_мед'
     surname_to_index_cover = map_surnames_to_covers(file_path, portrait_files_path, collage_files_path,
-                                                    header_row, col1_name, col2_name)
+                                                    header_row, col1_name, col2_name,
+                                                    type_album, design_album)
 
     copy_and_rename_covers(surname_to_index_cover, covers_folder_path, output_path)
 

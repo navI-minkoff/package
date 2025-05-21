@@ -2,8 +2,8 @@ import os
 import cv2
 import face_recognition
 import easyocr
-from face_recognition_utils import preprocess_collages, get_face_encodings
-from ocr_utils import extract_surname_from_face, extract_surname_from_portrait, match_with_dictionary
+from utils.adding_cover.face_recognition_utils import preprocess_collages, get_face_encodings
+from utils.adding_cover.ocr_utils import extract_surname_from_face, extract_surname_from_portrait, match_with_dictionary
 from utils.config_utils import load_album_coordinates
 from utils.file_utils import getJpegFilenames, extractNumber
 from utils.photoshop_utils import designs_album, types_album

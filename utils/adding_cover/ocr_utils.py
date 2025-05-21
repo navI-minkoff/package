@@ -2,7 +2,7 @@ import cv2
 import easyocr
 import numpy as np
 import Levenshtein
-from image_processing import preprocess_for_ocr, find_left_text_border, find_top_text_border
+from utils.adding_cover.image_processing import preprocess_for_ocr, find_left_text_border, find_top_text_border
 
 
 def match_with_dictionary(recognized_text, name_dictionary, max_distance=3):
