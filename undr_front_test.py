@@ -232,6 +232,8 @@ def front_main(page: ft.Page):
                     psd_file_path_text.value = e.files[0].path
                 elif excel_path_text.value == "Не выбрано!":
                     excel_path_text.value = e.files[0].path
+                else:
+                    pass  # Дополнительная обработка не требуется
             else:
                 if psd_file_path_text.value == "Не выбрано!":
                     psd_file_path_text.value = "Не выбрано!"
@@ -242,35 +244,35 @@ def front_main(page: ft.Page):
 
         def pick_directory_result(e: ft.FilePickerResultEvent):
             if e.path:
-                if covers_path_text.value == "Не выбрано!":
-                    covers_path_text.value = e.path
+                covers_path_text.value = e.path
             else:
-                if covers_path_text.value == "Не выбрано!":
-                    covers_path_text.value = "Не выбрано!"
+                covers_path_text.value = "Не выбрано!"
             covers_path_text.update()
 
+        # Инициализация FilePicker для файлов и директорий
         file_picker = ft.FilePicker(on_result=pick_file_result)
         directory_picker = ft.FilePicker(on_result=pick_directory_result)
         page.overlay.append(file_picker)
         page.overlay.append(directory_picker)
 
+        # Инициализация текстовых полей и чекбокса
         psd_file_path_text = ft.Text(settings["file_path"] if settings["file_path"] else "Не выбрано!", width=300)
         covers_path_text = ft.Text(settings["covers_path"] if settings["covers_path"] else "Не выбрано!", width=300)
         excel_path_text = ft.Text(settings["excel_path"] if settings["excel_path"] else "Не выбрано!", width=300)
         surname_column_text = ft.TextField(
-            label="Название колонки с фамилией",
+            label="Название колонки\nс фамилией",
             value=settings["surname_column"] if "surname_column" in settings else "",
             width=200,
             border_radius=10
         )
         cover_column_text = ft.TextField(
-            label="Название колонки с обложкой",
+            label="Название колонки\nс обложкой",
             value=settings["cover_column"] if "cover_column" in settings else "",
             width=200,
             border_radius=10
         )
         header_row_text = ft.TextField(
-            label="Номер строки с заголовками",
+            label="Номер строки\nс заголовками",
             value=str(settings["header_row"]) if "header_row" in settings else "",
             width=200,
             border_radius=10,
@@ -301,6 +303,7 @@ def front_main(page: ft.Page):
             page.theme_mode = settings["theme"]
             page.update()
 
+        # Создание выпадающего списка для темы
         theme_dropdown = ft.Dropdown(
             options=[
                 ft.dropdown.Option("Light"),
@@ -312,37 +315,53 @@ def front_main(page: ft.Page):
             border_radius=10
         )
 
+        # Формирование диалога настроек с увеличенными размерами
         settings_dialog = ft.AlertDialog(
             title=ft.Text("Настройки", size=18, weight=ft.FontWeight.BOLD),
-            content=ft.Column([
-                ft.Text("Выбор темы", size=14, weight=ft.FontWeight.BOLD),
-                theme_dropdown,
-                ft.Divider(height=20, thickness=1),
-                ft.Text("PSD", size=14, weight=ft.FontWeight.BOLD),
-                ft.Row([
-                    ft.Text("Путь к PSD:", size=14),
-                    ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
-                    psd_file_path_text,
-                ]),
-                ft.Row([close_psd_file_checkbox]),
-                ft.Divider(height=20, thickness=1),
-                ft.Text("Excel", size=14, weight=ft.FontWeight.BOLD),
-                ft.Row([
-                    ft.Text("Путь к Excel таблице:", size=14),
-                    ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
-                    excel_path_text,
-                ]),
-                surname_column_text,
-                cover_column_text,
-                header_row_text,
-                ft.Divider(height=20, thickness=1),
-                ft.Text("Обложки", size=14, weight=ft.FontWeight.BOLD),
-                ft.Row([
-                    ft.Text("Путь к обложкам:", size=14),
-                    ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: directory_picker.get_directory_path()),
-                    covers_path_text,
-                ]),
-            ], spacing=10),
+            content=ft.Container(
+                content=ft.Column([
+                    # Секция выбора темы
+                    ft.Text("Выбор темы", size=14, weight=ft.FontWeight.BOLD),
+                    theme_dropdown,
+                    ft.Divider(height=20, thickness=1),
+
+                    # Секция PSD
+                    ft.Text("PSD", size=14, weight=ft.FontWeight.BOLD),
+                    ft.Row([
+                        ft.Text("Путь к PSD:", size=14),
+                        ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
+                        psd_file_path_text,
+                    ]),
+                    ft.Row([close_psd_file_checkbox]),
+                    ft.Divider(height=20, thickness=1),
+
+                    # Секция Excel
+                    ft.Text("Excel", size=14, weight=ft.FontWeight.BOLD),
+                    ft.Row([
+                        ft.Text("Путь к Excel таблице:", size=14),
+                        ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: file_picker.pick_files()),
+                        excel_path_text,
+                    ]),
+                    ft.Row([
+                        surname_column_text,
+                        ft.Container(width=10),  # Отступ между полями
+                        cover_column_text,
+                        ft.Container(width=10),  # Отступ между полями
+                        header_row_text
+                    ], alignment=ft.MainAxisAlignment.CENTER),
+                    ft.Divider(height=20, thickness=1),
+
+                    # Секция Обложки
+                    ft.Text("Обложки", size=14, weight=ft.FontWeight.BOLD),
+                    ft.Row([
+                        ft.Text("Путь к обложкам:", size=14),
+                        ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: directory_picker.get_directory_path()),
+                        covers_path_text,
+                    ]),
+                ], spacing=10),
+                width=700,
+                height=500
+            ),
             actions=[
                 ft.ElevatedButton("Сохранить", on_click=save_and_close, bgcolor=Colors.BLUE_700, color=Colors.WHITE)
             ],
@@ -674,8 +693,12 @@ def is_already_running():
         lock_socket.close()
 
 
-# Главная функция приложения
 def main(page: ft.Page):
+    page.window_min_width = 800  # Минимальная ширина окна
+    page.window_min_height = 900  # Минимальная высота окна
+    page.window_width = 800      # Начальная ширина окна
+    page.window_height = 1000     # Начальная высота окна
+
     def show_main_interface():
         logging.info("Запуск основного интерфейса")
         page.controls.clear()

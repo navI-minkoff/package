@@ -420,7 +420,7 @@ def front_main(page: ft.Page):
         ft.Row(
             [
                 ft.ElevatedButton(
-                    "Развороты",
+                    "Портреты",
                     height=buttons_height,
                     icon=ft.Icons.FOLDER_OPEN,
                     on_click=lambda _: get_directory_path_folder(pick_path_reversals_dialog, selected_path_reversals),
