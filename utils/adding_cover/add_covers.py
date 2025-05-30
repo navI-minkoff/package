@@ -102,7 +102,7 @@ def adding_covers_based_on_portrait(portrait_files_path, collage_files_path, out
 
     copy_and_rename_covers(surname_to_index_cover, covers_folder_path, output_path)
 
-
-if __name__ == "__main__":
-    adding_covers_based_on_portrait()
+#
+# if __name__ == "__main__":
+#     adding_covers_based_on_portrait()
 

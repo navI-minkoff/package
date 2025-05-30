@@ -7,22 +7,23 @@ import time
 import logging
 import socket
 import flet as ft
+import requests
 from flet import Theme, Colors
 
 from main_module.package_module import package
-from utils import update_module
+from utils import error_message_module
 from utils.adding_cover.add_covers import adding_covers_based_on_portrait
 from utils.admin_root import ensure_admin, restart_with_admin, run_as_admin
 from utils.file_utils import getJpegFilenames, extractNumber
 from utils.photoshop_utils import types_album, designs_album
 from utils.naming_utils import truncateAfterWordOrLast
 from utils.settings_utils import load_settings, save_settings
+from dotenv import load_dotenv
 
 # Настройка логирования
 logging.basicConfig(filename="app.log", level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 buttons_height = 40
-
 
 path_to_layout_text = ft.Text()
 path_to_layout = None
@@ -88,19 +89,50 @@ def clear_directory_path():
 
 
 settings = load_settings()
+load_dotenv()
+
 stop_package_thread = False
 stop_package_event = threading.Event()
 
 
 # Функция-заглушка для проверки токена
-def check_token(token: str) -> tuple[bool, str]:
+# def check_token(token: str) -> tuple[bool, str]:
+#     if not token:
+#         return False, "Токен не введен"
+#     if token == "test123":
+#         logging.info("Успешная авторизация")
+#         return True, None
+#     logging.warning(f"Неверный токен: {token}")
+#     return False, "Неверный токен"
+
+
+def check_token(token: str) -> tuple[bool, str | None]:
     if not token:
         return False, "Токен не введен"
-    if token == "test123":
-        logging.info("Успешная авторизация")
-        return True, None
-    logging.warning(f"Неверный токен: {token}")
-    return False, "Неверный токен"
+
+    server_url = os.getenv("SERVER_URL")
+    auth_token = os.getenv("AUTH_TOKEN")
+    headers = {"accept": "application/json", "Authorization": f"Bearer {auth_token}"}
+
+    try:
+        response = requests.post(server_url, params={"token": token}, headers=headers, timeout=5)
+        response.raise_for_status()
+
+        result = response.json()
+
+        if result.get("is_valid", False):
+            return True, None
+        else:
+            return False, result.get("message", "Токен недействителен")
+
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            return False, "Токен не найден"
+        return False, "Ошибка подключения к серверу"
+    except requests.exceptions.RequestException as e:
+        return False, "Сетевая ошибка: проверьте подключение к интернету"
+    except ValueError as e:
+        return False, "Ошибка обработки ответа сервера"
 
 
 # Функция создания диалога авторизации
@@ -130,7 +162,7 @@ def create_auth_dialog(page: ft.Page, on_success: callable):
         loading_indicator.visible = True
         token_input.disabled = True
         page.update()
-        time.sleep(1)  # Имитация задержки сервера
+        time.sleep(1)
         success, error = check_token(token)
         loading_indicator.visible = False
         token_input.disabled = False
@@ -158,7 +190,7 @@ def create_auth_dialog(page: ft.Page, on_success: callable):
             shape=ft.RoundedRectangleBorder(radius=8),
             padding=ft.padding.only(left=20, right=20, top=8, bottom=8)
         ),
-        disabled=True  # Изначально неактивна
+        disabled=True
     )
     exit_button = ft.TextButton(
         "Выйти",
@@ -175,7 +207,7 @@ def create_auth_dialog(page: ft.Page, on_success: callable):
         content=ft.Container(
             content=ft.Column([
                 token_input,
-                buttons_row,  # Кнопки перенесены сюда
+                buttons_row,
                 error_text,
                 loading_indicator
             ], alignment=ft.MainAxisAlignment.CENTER, spacing=10),
@@ -250,24 +282,24 @@ def front_main(page: ft.Page):
         covers_path_text = ft.Text(settings["covers_path"] if settings["covers_path"] else "Не выбрано!", width=300)
         excel_path_text = ft.Text(settings["excel_path"] if settings["excel_path"] else "Не выбрано!", width=300)
         surname_column_text = ft.TextField(
-            label="Название колонки\nс фамилией",
+            label="Номер колонки\nс фамилиями",
             value=settings["surname_column"] if "surname_column" in settings else "",
             width=150,
             border_radius=10
         )
         cover_column_text = ft.TextField(
-            label="Название колонки\nс обложкой",
+            label="Номер колонки\nс обложками",
             value=settings["cover_column"] if "cover_column" in settings else "",
-            width=170,
+            width=150,
             border_radius=10
         )
-        header_row_text = ft.TextField(
-            label="Номер строки\nс заголовками",
-            value=str(settings["header_row"]) if "header_row" in settings else "",
-            width=130,
-            border_radius=10,
-            keyboard_type=ft.KeyboardType.NUMBER
-        )
+        # header_row_text = ft.TextField(
+        #     label="Номер строки\nс заголовками",
+        #     value=str(settings["header_row"]) if "header_row" in settings else "",
+        #     width=130,
+        #     border_radius=10,
+        #     keyboard_type=ft.KeyboardType.NUMBER
+        # )
         close_psd_file_checkbox = ft.Checkbox(
             label="Закрывать PSD файл",
             value=True if settings["close_psd"] == "True" else False
@@ -276,17 +308,17 @@ def front_main(page: ft.Page):
         def save_and_close(e):
             settings["theme"] = theme_dropdown.value
             if not psd_file_path_text.value or psd_file_path_text.value == "Не выбрано!":
-                update_module.show_error_message("Не выбран PSD файл")
+                error_message_module.show_error_message("Не выбран PSD файл")
                 return
             elif psd_file_path_text.value.split('.')[-1].lower() != 'psd':
-                update_module.show_error_message("Выберите файл формата PSD")
+                error_message_module.show_error_message("Выберите файл формата PSD")
                 return
             settings["file_path"] = psd_file_path_text.value
             settings["covers_path"] = covers_path_text.value if covers_path_text.value != "Не выбрано!" else ""
             settings["excel_path"] = excel_path_text.value if excel_path_text.value != "Не выбрано!" else ""
             settings["surname_column"] = surname_column_text.value if surname_column_text.value else ""
             settings["cover_column"] = cover_column_text.value if cover_column_text.value else ""
-            settings["header_row"] = int(header_row_text.value) if header_row_text.value.isdigit() else 1
+            # settings["header_row"] = int(header_row_text.value) if header_row_text.value.isdigit() else 1
             settings["close_psd"] = str(close_psd_file_checkbox.value)
             save_settings(settings)
             settings_dialog.open = False
@@ -337,8 +369,8 @@ def front_main(page: ft.Page):
                         surname_column_text,
                         ft.Container(width=10),
                         cover_column_text,
-                        ft.Container(width=10),
-                        header_row_text
+                        # ft.Container(width=10),
+                        # header_row_text
                     ], alignment=ft.MainAxisAlignment.START),
                     ft.Divider(height=20, thickness=1),
 
@@ -346,7 +378,8 @@ def front_main(page: ft.Page):
                     ft.Text("Обложки", size=14, weight=ft.FontWeight.BOLD),
                     ft.Row([
                         ft.Text("Путь к обложкам:", size=14),
-                        ft.IconButton(icon=ft.Icons.FOLDER_OPEN, on_click=lambda _: directory_picker.get_directory_path()),
+                        ft.IconButton(icon=ft.Icons.FOLDER_OPEN,
+                                      on_click=lambda _: directory_picker.get_directory_path()),
                         covers_path_text,
                     ]),
                 ], spacing=10),  # Включаем прокрутку
@@ -441,17 +474,17 @@ def front_main(page: ft.Page):
 
     def check_all_paths_specified(lists_jpeg, groups_jpeg):
         if not settings["file_path"]:
-            update_module.show_error_message("Не выбран PSD файл")
+            error_message_module.show_error_message("Не выбран PSD файл")
             return True
         if not selected_path_reversals.value or not selected_path_teacher.value \
                 or not lists_jpeg[0] or not groups_jpeg[0] \
                 or (elevated_button_individual_list in row_lists.controls and not lists_jpeg[1]) \
                 or (elevated_button_individual_group in row_group.controls and not groups_jpeg[1]) \
                 or not selected_path_output.value:
-            update_module.show_error_message('Укажите все пути')
+            error_message_module.show_error_message('Укажите все пути')
             return True
         if not dropdown.value:
-            update_module.show_error_message('Выберите вид альбома')
+            error_message_module.show_error_message('Выберите вид альбома')
             return True
         return False
 
@@ -537,7 +570,8 @@ def front_main(page: ft.Page):
     switch1 = ft.Switch(
         label="Индивидуальные списки",
         height=buttons_height,
-        on_change=lambda e: switch_changed(e, elevated_button_individual_list, selected_path_individual_lists, row_lists)
+        on_change=lambda e: switch_changed(e, elevated_button_individual_list, selected_path_individual_lists,
+                                           row_lists)
     )
 
     elevated_button_individual_group = ft.ElevatedButton(
@@ -549,7 +583,8 @@ def front_main(page: ft.Page):
     switch2 = ft.Switch(
         label="Индивидуальные групповые",
         height=buttons_height,
-        on_change=lambda e: switch_changed(e, elevated_button_individual_group, selected_path_individual_group, row_group)
+        on_change=lambda e: switch_changed(e, elevated_button_individual_group, selected_path_individual_group,
+                                           row_group)
     )
 
     design_switcher = ft.Switch(
@@ -671,7 +706,7 @@ def front_main(page: ft.Page):
         adding_covers_based_on_portrait(portrait_files_path, collage_files_path, output_path, type_album, design_album)
 
     stop_event = threading.Event()
-    update_module.init(error_container)
+    error_message_module.init(error_container)
 
 
 # Проверка на множественный запуск
@@ -691,8 +726,8 @@ def main(page: ft.Page):
     # Устанавливаем минимальные и начальные размеры окна сразу
     page.window_min_width = 800  # Минимальная ширина окна
     page.window_min_height = 600  # Минимальная высота окна
-    page.window_width = 800      # Начальная ширина окна
-    page.window_height = 600     # Начальная высота окна
+    page.window_width = 800  # Начальная ширина окна
+    page.window_height = 600  # Начальная высота окна
 
     def show_main_interface():
         logging.info("Запуск основного интерфейса")

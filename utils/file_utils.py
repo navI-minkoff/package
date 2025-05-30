@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from utils import update_module
+from utils import error_message_module
 from utils.photoshop_utils import shared_postfix
 
 
@@ -9,13 +9,13 @@ def getJpegFilenames(folder_path):
     try:
         all_files = os.listdir(folder_path)
     except Exception as e:
-        update_module.show_error_message(f"Файл {folder_path} указан неверно")
+        error_message_module.show_error_message(f"Файл {folder_path} указан неверно")
         print(f"Файл {folder_path} указан неверно: {e}")
     jpeg_files = []
     for file in all_files:
         _, ext = os.path.splitext(file)
         if ext.lower() not in ['.jpg', '.jpeg']:
-            update_module.show_error_message(f"Файл {file} не является JPEG файлом")
+            error_message_module.show_error_message(f"Файл {file} не является JPEG файлом")
             raise ValueError(f"Файл {file} не является JPEG файлом")
         jpeg_files.append(file)
     return jpeg_files

@@ -5,6 +5,7 @@ def get_face_encodings(image_path):
     image = face_recognition.load_image_file(image_path)
     face_locations = face_recognition.face_locations(image)
     encodings = face_recognition.face_encodings(image, face_locations)
+
     return image, face_locations, encodings
 
 

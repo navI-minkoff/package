@@ -4,19 +4,19 @@ import numpy as np
 
 def preprocess_for_ocr(roi):
     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    alpha = 1.7  # Множитель контраста
-    beta = 10  # Смещение яркости
+    alpha = 1.7
+    beta = 10
     contrast = cv2.convertScaleAbs(gray, alpha=alpha, beta=beta)
     _, binary = cv2.threshold(contrast, 180, 255, cv2.THRESH_BINARY)
     scale = 2
     enlarged = cv2.resize(binary, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+
     return enlarged
 
 
 def preprocess_image(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    # Инвертировать, если фон тёмный, а текст светлый
     mean_brightness = np.mean(gray)
     if mean_brightness < 127:
         gray = cv2.bitwise_not(gray)

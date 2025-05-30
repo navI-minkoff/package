@@ -1,4 +1,4 @@
-from utils import update_module
+from utils import error_message_module
 from utils.naming_utils import generateStrings, generatePrefixes
 from PIL import Image
 
@@ -164,10 +164,10 @@ def packagingGroup(ps, active_document, jpeg_options,
     count_group_pages -= indexPhoto
 
     if (count_group_pages % 2 and album_version != types_album[2]) or \
-        (count_group_pages % 2 == 0 and checkLastPagePremAlbum(
-        Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}"))):
-            update_module.show_error_message('Неверное количесво групповых фотографий')
-            return
+            (count_group_pages % 2 == 0 and checkLastPagePremAlbum(
+                Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}"))):
+        error_message_module.show_error_message('Неверное количесво групповых фотографий')
+        return
 
     deleteUnwantedLayers(active_document, layersCannotRemoved)
     for i in range(indexPhoto, count_group_pages + indexPhoto - 1, 2):
@@ -181,7 +181,7 @@ def packagingGroup(ps, active_document, jpeg_options,
         indexName += 1
 
     if count_group_pages % 2 and album_version == types_album[2] and checkLastPagePremAlbum(
-        Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}")):
+            Image.open(f"{group_folder_path}/{group_jpeg_filenames[-1]}")):
         placeAndResizeImage(ps, active_document, image_path=f"{group_folder_path}/{group_jpeg_filenames[-1]}",
                             resize=False,
                             edge='c')

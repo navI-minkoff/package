@@ -6,18 +6,6 @@ from utils.adding_cover.image_processing import preprocess_for_ocr, find_left_te
 
 
 def match_with_dictionary(recognized_text, name_dictionary, max_distance=3):
-    """
-    Сравнивает распознанный текст с именами из словаря, используя расстояние Левенштейна.
-    Сравнение регистронезависимое.
-
-    Args:
-        recognized_text (str): Распознанный текст для сравнения.
-        name_dictionary (iterable): Список или множество имен для сравнения.
-        max_distance (int): Максимально допустимое расстояние Левенштейна (по умолчанию 3).
-
-    Returns:
-        str or None: Лучшее совпадающее имя из словаря или None, если подходящего совпадения нет.
-    """
     recognized_text = recognized_text.strip().lower()
     best_match = None
     best_distance = None
@@ -66,34 +54,16 @@ def get_upmost_word(words):
 
 
 def extract_words_from_coordinates(image_bgr, roi_coordinates, reader):
-    """
-    Извлекает текст из заданной области изображения с помощью OCR.
-
-    Args:
-        image_bgr: Изображение в формате BGR (numpy array).
-        roi_coordinates: Кортеж (top, right, bottom, left) с координатами области интереса.
-        reader: Объект для OCR (например, easyocr.Reader).
-
-    Returns:
-        list: Список результатов OCR, где каждый элемент содержит данные о распознанном тексте
-              (например, координаты, текст, уверенность). Пустой список, если ничего не найдено.
-    """
     top, right, bottom, left = roi_coordinates
 
-    # Ограничиваем координаты размерами изображения
     roi_top = max(top, 0)
     roi_bottom = min(bottom, image_bgr.shape[0])
     roi_left = max(left, 0)
     roi_right = min(right, image_bgr.shape[1])
 
     roi = image_bgr[roi_top:roi_bottom, roi_left:roi_right]
-
     roi = preprocess_for_ocr(roi)
 
-    # Сохраняем для отладки сохраняем
-    cv2.imwrite("debug_roi.png", roi)
-
-    # OCR для извлечения текста
     result = reader.readtext(
         roi,
         detail=1,

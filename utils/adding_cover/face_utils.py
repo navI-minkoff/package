@@ -109,18 +109,18 @@ def find_top_text_border(image_bgr, left_border, face_bottom, search_wight=1000)
     return face_bottom
 
 
-def preprocess_for_ocr(roi):
-    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    # Усиление контраста
-    alpha = 1.7  # Множитель контраста
-    beta = 10  # Смещение яркости
-    contrast = cv2.convertScaleAbs(gray, alpha=alpha, beta=beta)
-    # Бинаризация (порог можно подобрать)
-    _, binary = cv2.threshold(contrast, 180, 255, cv2.THRESH_BINARY)
-    # Увеличение размера (если текст мелкий)
-    scale = 2
-    enlarged = cv2.resize(binary, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
-    return enlarged
+# def preprocess_for_ocr(roi):
+#     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+#     # Усиление контраста
+#     alpha = 1.7  # Множитель контраста
+#     beta = 10  # Смещение яркости
+#     contrast = cv2.convertScaleAbs(gray, alpha=alpha, beta=beta)
+#     # Бинаризация (порог можно подобрать)
+#     _, binary = cv2.threshold(contrast, 180, 255, cv2.THRESH_BINARY)
+#     # Увеличение размера (если текст мелкий)
+#     scale = 2
+#     enlarged = cv2.resize(binary, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+#     return enlarged
 
 
 def preprocess_image(img):
@@ -490,9 +490,9 @@ all_student_names = [
     "Деревянко", "Болотова", "Жуманазарова", "Дюрич",
     "Плеханов", "Хдрян", "Акрамова", "Нечеухин",
     "Зияева", "Акылбекова",
-    "Шуплецова",  #темный
-    "Павлушина",  #светлый прем
-    "Пучкин"      #светлый мини
+    "Шуплецова",  # темный
+    "Павлушина",  # светлый прем
+    "Пучкин"  # светлый мини
 ]
 
 # Пути к портретам и коллажам

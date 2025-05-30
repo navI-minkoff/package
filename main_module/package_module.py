@@ -7,7 +7,7 @@ import sys
 import comtypes
 from photoshop import Session
 
-from utils import update_module
+from utils import error_message_module
 from utils.photoshop_utils import packagingSpreads, packingLists, packagingGroup, deleteUnwantedLayers, fillLayer, \
     packingLastListsWithGroupPages, layersCannotRemoved, paintLayer, shared_postfix
 from utils.file_utils import getJpegFilenames, extractNumber, getNameByNumberSpreads, distributionByNumberReversals, \
@@ -22,9 +22,9 @@ def package(reversals_folder_path, image_teacher_path,
         with Session(action="open", file_path=source_psd_path,
                      auto_close=True if auto_close == "True" else False) as ps:
             doc = ps.active_document
-
             jpeg_options = ps.JPEGSaveOptions()
             jpeg_options.quality = 12
+
             fillLayer(ps, doc, paintLayer, album_design)
 
             deleteUnwantedLayers(doc, layersCannotRemoved)
@@ -59,5 +59,5 @@ def package(reversals_folder_path, image_teacher_path,
 
             distributionByNumberReversals(output_path, first_file_from_shared_lists, last_file_from_shared_lists)
     except Exception as e:
-        update_module.show_error_message(f"Ошибка: {e}")
+        error_message_module.show_error_message(f"Ошибка: {e}")
         print(f"Error during packaging: {e}")

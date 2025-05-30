@@ -35,4 +35,3 @@ def save_settings(settings):
             json.dump(settings, f, indent=4, ensure_ascii=False)
 
 
-print(load_settings())
